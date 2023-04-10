@@ -44,37 +44,56 @@
 </template>
 
 <script>
-const columns = [
-  {
-    title: "Name",
-    dataIndex: "name",
-  },
-  {
-    title: "Age",
-    dataIndex: "age",
-  },
-  {
-    title: "Address",
-    dataIndex: "address",
-  },
-];
+import data from "@/data/mock_data.json";
+// const columns = [
+//   {
+//     title: "Name",
+//     dataIndex: "name",
+//   },
+//   {
+//     title: "Age",
+//     dataIndex: "age",
+//   },
+//   {
+//     title: "Address",
+//     dataIndex: "address",
+//   },
+// ];
 
-const data = [];
-for (let i = 0; i < 46; i++) {
-  data.push({
-    key: i,
-    name: `Edward King ${i}`,
-    age: 32,
-    address: `London, Park Lane no. ${i}`,
-  });
-}
+// const data = [];
+// for (let i = 0; i < 46; i++) {
+//   data.push({
+//     key: i,
+//     name: `Edward King ${i}`,
+//     age: 32,
+//     address: `London, Park Lane no. ${i}`,
+//   });
+// }
 
 export default {
   name: "HelloWorld",
   data() {
     return {
-      data,
-      columns,
+      data: [],
+      columns: [
+        {
+          title: "STT",
+          dataIndex: "id",
+        },
+        {
+          title: "Mẫu hoá đơn",
+          dataIndex: "invoice",
+        },
+        { title: "Ký hiệu hoá đơn", dataIndex: "symbolInvoice" },
+        { title: "Ngày lập hoá đơn", dataIndex: "invoiceDate" },
+        { title: "Tên người bán", dataIndex: "nameSeller" },
+        { title: "Mã số thuế người bán", dataIndex: "taxCodeSeller" },
+        { title: "Giá trị trước thuế", dataIndex: "preTax" },
+        { title: "GTGT", dataIndex: "vat" },
+        { title: "Tổng GT thanh toán", dataIndex: "totalPayment" },
+        { title: "Trạng thái tích hợp ERP", dataIndex: "intergationERP" },
+        { title: "Trạng thái kiểm tra hợp đồng", dataIndex: "contractCheck" },
+      ],
       selectedRowKeys: [], // Check here to configure the default column
       loading: false,
       pagination: {
@@ -85,6 +104,7 @@ export default {
     };
   },
   mounted() {
+    this.data = data;
     this.pagination.total = this.data && this.data.length;
     this.$nextTick(() => {
       console.log(this.$refs.aTable);
