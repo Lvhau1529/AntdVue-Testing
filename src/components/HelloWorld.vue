@@ -26,6 +26,32 @@
       :data-source="data"
       :pagination="pagination"
     >
+      <span slot="intergationERP" slot-scope="intergationERP">
+        <a-tag
+          :color="
+            intergationERP === 'loser'
+              ? 'volcano'
+              : intergationERP.length > 5
+              ? 'geekblue'
+              : 'green'
+          "
+        >
+          {{ intergationERP }}
+        </a-tag>
+      </span>
+      <span slot="contractCheck" slot-scope="contractCheck">
+        <a-tag
+          :color="
+            contractCheck === 'loser'
+              ? 'green'
+              : contractCheck.length > 5
+              ? 'geekblue'
+              : 'volcano'
+          "
+        >
+          {{ contractCheck }}
+        </a-tag>
+      </span>
       <template slot="footer">
         <div>
           <a-pagination
@@ -78,7 +104,15 @@ export default {
       columns: [
         {
           title: "STT",
-          dataIndex: "id",
+          dataIndex: "key",
+          key: "key",
+          customRender: (text, record, index) => {
+            return (
+              (this.pagination.current - 1) * this.pagination.pageSize +
+              index +
+              1
+            );
+          },
         },
         {
           title: "Mẫu hoá đơn",
@@ -91,8 +125,16 @@ export default {
         { title: "Giá trị trước thuế", dataIndex: "preTax" },
         { title: "GTGT", dataIndex: "vat" },
         { title: "Tổng GT thanh toán", dataIndex: "totalPayment" },
-        { title: "Trạng thái tích hợp ERP", dataIndex: "intergationERP" },
-        { title: "Trạng thái kiểm tra hợp đồng", dataIndex: "contractCheck" },
+        {
+          title: "Trạng thái tích hợp ERP",
+          dataIndex: "intergationERP",
+          scopedSlots: { customRender: "intergationERP" },
+        },
+        {
+          title: "Trạng thái kiểm tra hợp đồng",
+          dataIndex: "contractCheck",
+          scopedSlots: { customRender: "contractCheck" },
+        },
       ],
       selectedRowKeys: [], // Check here to configure the default column
       loading: false,
