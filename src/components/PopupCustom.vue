@@ -8,16 +8,19 @@
       :confirm-loading="loading"
     >
       <template slot="title">
-        <div class="modal-header">
+        <div class="modal__header">
           <p>Thông báo</p>
         </div>
       </template>
-      <div class="modal-content">
+      <div class="modal__content">
         <p>{{ content }}</p>
         <p v-if="subContent">{{ subContent }}</p>
+        <p v-if="note" class="modal__content--note">
+          <span style="color: red">Lưu ý</span>: {{ note }}
+        </p>
       </div>
       <template slot="footer">
-        <div class="modal-footer">
+        <div class="modal__footer">
           <a-button @click="handleOk" type="primary" :loading="loading"
             >Xác nhận</a-button
           >
@@ -38,6 +41,10 @@ export default {
       required: true,
     },
     subContent: {
+      type: String,
+      default: "",
+    },
+    note: {
       type: String,
       default: "",
     },
@@ -80,25 +87,30 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-.modal-header {
-  text-align: center;
-  p {
-    font-size: 20px;
-    margin: 0;
+.modal {
+  &__header {
+    text-align: center;
+    p {
+      font-size: 20px;
+      margin: 0;
+    }
   }
-}
-.modal-content {
-  text-align: center;
-  font-weight: 500;
-  p {
-    margin: 0;
+  &__content {
+    text-align: center;
+    font-weight: 500;
+    p {
+      margin: 0;
+    }
+    &--note {
+      font-style: italic;
+    }
   }
-}
-.modal-footer {
-  display: flex;
-  justify-content: center;
-  button:last-child {
-    margin-left: 10px;
+  &__footer {
+    display: flex;
+    justify-content: center;
+    button:last-child {
+      margin-left: 10px;
+    }
   }
 }
 </style>

@@ -73,19 +73,17 @@
             v-model="selected"
           />
         </div>
-        <div>
-          <a-input-search
-            placeholder="Tìm kiếm"
-            @search="onSearch"
-            allowClear
-          />
-        </div>
+        <SearchField @search="onSearch" />
       </div>
       <div class="box-header__right">
         <div>
-          <a-button @click="handleOpenPopup('CheckVerify')" type="primary">
+          <ButtonField
+            title="Kiểm tra tính hợp lệ"
+            @clickBtn="handleOpenPopup('CheckVerify')"
+          />
+          <!-- <a-button @click="handleOpenPopup('CheckVerify')" type="primary">
             Kiểm tra tính hợp lệ
-          </a-button>
+          </a-button> -->
         </div>
         <div>
           <a-button type="primary" @click="handleOpenPopup('IntergationERP')">
@@ -143,6 +141,7 @@
       ref="PopupCustom"
       :content="modal.content"
       :sub-content="modal.subConent"
+      :note="modal.note"
       :has-cancel="modal.hasCancel"
     />
   </div>
@@ -151,14 +150,18 @@
 <script>
 import data from "@/data/mock_data.json";
 import PopupCustom from "@/components/PopupCustom.vue";
-import { getProfile } from "@/services/index";
+import WeatherService from "@/services/index";
 import SelectField from "@/components/SelectField.vue";
+import ButtonField from "@/components/ButtonField.vue";
+import SearchField from "./SearchField.vue";
 
 export default {
   name: "HelloWorld",
   components: {
     PopupCustom,
     SelectField,
+    ButtonField,
+    SearchField,
   },
   data() {
     return {
@@ -266,7 +269,13 @@ export default {
       this.pagination.pageSize = pageSize;
     },
     async onSearch(search) {
-      this.result = await getProfile(search);
+      await WeatherService.searchByCity(search)
+        .then((res) => {
+          this.result = res;
+        })
+        .catch((err) => {
+          console.log("Loi roi", err);
+        });
     },
     handleOpenPopup(type) {
       switch (type) {
@@ -274,13 +283,14 @@ export default {
           this.modal = {
             content: "Hoá đơn đã được tích hợp và nhập liệu trên hệ thống ERP",
             subConent: "Bạn vui lòng không tích hợp lại",
+            hasCancel: false,
           };
           break;
         case "IntergationERP":
           this.modal = {
             content:
               "Bạn có chắc chắn muốn tích hợp hoá đơn lên hệ thống ERP không?",
-            hasCancel: true,
+            note: "Không nhập liệu hoá đơn đã được tích hợp lên hệ thống",
           };
           break;
 
