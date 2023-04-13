@@ -23,40 +23,14 @@
       <div class="box-header__left">
         <div>
           <a-tree-select
-            v-model="value"
-            style="min-width: 220px"
-            :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-            placeholder="Thư mục"
+            :tree-data="treeData"
+            :show-search="true"
+            :dropdown-style="{ maxHeight: '400px' }"
+            style="width: 300px"
             allow-clear
+            placeholder="Please select"
+            @change="handleChange"
           >
-            <a-tree-select-node key="0-1" value="parent 1" title="parent 1">
-              <a-tree-select-node
-                key="0-1-1"
-                value="parent 1-0"
-                title="parent 1-0"
-              >
-                <a-tree-select-node
-                  key="random"
-                  :selectable="false"
-                  value="leaf1"
-                  title="my leaf"
-                />
-                <a-tree-select-node
-                  key="random1"
-                  value="leaf2"
-                  title="your leaf"
-                />
-              </a-tree-select-node>
-              <a-tree-select-node
-                key="random2"
-                value="parent 1-1"
-                title="parent 1-1"
-              >
-                <a-tree-select-node key="random3" value="sss">
-                  <b slot="title" style="color: #08c">sss</b>
-                </a-tree-select-node>
-              </a-tree-select-node>
-            </a-tree-select-node>
           </a-tree-select>
         </div>
         <div>
@@ -149,6 +123,7 @@
 
 <script>
 import data from "@/data/mock_data.json";
+import list_folder from "@/data/list_folder.json";
 import PopupCustom from "@/components/PopupCustom.vue";
 import WeatherService from "@/services/index";
 import SelectField from "@/components/SelectField.vue";
@@ -236,10 +211,37 @@ export default {
           label: "Không hợp lệ",
         },
       ],
+      treeData: [
+        {
+          title: "Node 1",
+          value: "1",
+          key: "1",
+          children: [
+            { title: "Child Node 1-1", value: "1-1", key: "1-1" },
+            { title: "Child Node 1-2", value: "1-2", key: "1-2" },
+          ],
+        },
+        {
+          title: "Node 2",
+          value: "2",
+          key: "2",
+          children: [
+            {
+              title: "Child Node 2-1",
+              value: "2-1",
+              key: "2-1",
+              children: [{ title: "Child Node 2-1-1", value: "2-1-1" }],
+            },
+            { title: "Child Node 2-2", value: "2-2", key: "2-2" },
+          ],
+        },
+        // Add more nodes as needed
+      ],
     };
   },
   mounted() {
     this.data = data;
+    this.formatData();
     this.pagination.total = this.data && this.data.length;
     this.$nextTick(() => {
       console.log(this.$refs.aTable);
@@ -251,6 +253,44 @@ export default {
     },
   },
   methods: {
+    formatData() {
+      let folderName = "";
+      let itemTree = {
+        title: "",
+        value: "",
+        children: [],
+      };
+      let dataTree = list_folder.result;
+      this.treeData = dataTree.filter((item) => {
+        console.log(item);
+        if (item.type === "folder") {
+          folderName = item.path;
+          itemTree = {
+            title: item.path,
+            value: item.file_id,
+            children: [],
+          };
+          return itemTree;
+        }
+        if (
+          item.type === "file" &&
+          folderName &&
+          item.path.includes(folderName)
+        ) {
+          itemTree.children.push({
+            title: item.path.replace(folderName, ""),
+            value: item.file_id,
+          });
+          return itemTree;
+        }
+        console.log(itemTree);
+        return false;
+      });
+      console.log("this.treeData", this.treeData);
+    },
+    // formatItem(item) {
+    //   let
+    // },
     start() {
       this.loading = true;
       // ajax request after empty completing
@@ -300,6 +340,9 @@ export default {
       this.$nextTick(() => {
         this.$refs.PopupCustom.showModal();
       });
+    },
+    handleChange(value) {
+      console.log(value);
     },
   },
 };

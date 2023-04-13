@@ -1,0 +1,241 @@
+{
+  "code": "0",
+  "message": "Thành công",
+  "result": [
+    {
+      "file_id": 152,
+      "path": "",
+      "type": "folder"
+    },
+    {
+      "file_id": 5450,
+      "path": "03.[ECM][1.5]_Phuong an.docx",
+      "type": "file"
+    },
+    {
+      "file_id": 6201,
+      "path": "1C22TAD_00000009_1676217770 - Copy (2).xml",
+      "type": "file"
+    },
+    {
+      "file_id": 5154,
+      "path": "3557_MOBIFONE-CSKH_Lan3.pdf",
+      "type": "file"
+    },
+    {
+      "file_id": 4587,
+      "path": "BD_00000156_28092022.xml",
+      "type": "file"
+    },
+    {
+      "file_id": 4590,
+      "path": "BD_82_29092022.xml",
+      "type": "file"
+    },
+    {
+      "file_id": 4588,
+      "path": "BD_khong_cks.xml",
+      "type": "file"
+    },
+    {
+      "file_id": 4591,
+      "path": "BIGDATA-00000064-31012023.xml",
+      "type": "file"
+    },
+    {
+      "file_id": 4595,
+      "path": "BIGDATA-00000065-31012023.xml",
+      "type": "file"
+    },
+    {
+      "file_id": 4592,
+      "path": "BIGDATA-00000066-31012023.xml",
+      "type": "file"
+    },
+    {
+      "file_id": 4593,
+      "path": "BIGDATA-00000067-31012023.xml",
+      "type": "file"
+    },
+    {
+      "file_id": 4594,
+      "path": "BIGDATA-00000068-31012023.xml",
+      "type": "file"
+    },
+    {
+      "file_id": 4906,
+      "path": "Bangoi-combined.pdf",
+      "type": "file"
+    },
+    {
+      "file_id": 6203,
+      "path": "Bug tìm kiếm/",
+      "type": "folder"
+    },
+    {
+      "file_id": 6216,
+      "path": "Bug tìm kiếm/1C22TAD_00000009_1676217770 - Copy (2).xml",
+      "type": "file"
+    },
+    {
+      "file_id": 6217,
+      "path": "Bug tìm kiếm/1C22TAD_00000009_1676217770 - Copy (3).xml",
+      "type": "file"
+    },
+    {
+      "file_id": 6213,
+      "path": "Bug tìm kiếm/1C22TAD_00000009_1676217770 - Copy (4).xml",
+      "type": "file"
+    },
+    {
+      "file_id": 6215,
+      "path": "Bug tìm kiếm/1C22TAD_00000009_1676217770 - Copy (5).xml",
+      "type": "file"
+    },
+    {
+      "file_id": 6212,
+      "path": "Bug tìm kiếm/1C22TAD_00000009_1676217770 - Copy (6).xml",
+      "type": "file"
+    },
+    {
+      "file_id": 6214,
+      "path": "Bug tìm kiếm/1C22TAD_00000009_1676217770 - Copy (7).xml",
+      "type": "file"
+    },
+    {
+      "file_id": 6210,
+      "path": "Bug tìm kiếm/1C22TAD_00000009_1676217770 - Copy (8).xml",
+      "type": "file"
+    },
+    {
+      "file_id": 6209,
+      "path": "Bug tìm kiếm/1C22TAD_00000009_1676217770 - Copy (9) (1).xml",
+      "type": "file"
+    },
+    {
+      "file_id": 6206,
+      "path": "Bug tìm kiếm/1C22TAD_00000009_1676217770 - Copy (9) (2).xml",
+      "type": "file"
+    },
+    {
+      "file_id": 6204,
+      "path": "Bug tìm kiếm/1C22TAD_00000009_1676217770 - Copy (9) (3).xml",
+      "type": "file"
+    },
+    {
+      "file_id": 6208,
+      "path": "Bug tìm kiếm/1C22TAD_00000009_1676217770 - Copy (9) (4).xml",
+      "type": "file"
+    },
+    {
+      "file_id": 6205,
+      "path": "Bug tìm kiếm/1C22TAD_00000009_1676217770 - Copy (9) (5).xml",
+      "type": "file"
+    },
+    {
+      "file_id": 6207,
+      "path": "Bug tìm kiếm/1C22TAD_00000009_1676217770 - Copy (9) (6).xml",
+      "type": "file"
+    },
+    {
+      "file_id": 6211,
+      "path": "Bug tìm kiếm/1C22TAD_00000009_1676217770 - Copy (9).xml",
+      "type": "file"
+    },
+    {
+      "file_id": 4586,
+      "path": "ChatGPT.pptx",
+      "type": "file"
+    },
+    {
+      "file_id": 4514,
+      "path": "Hồng share/",
+      "type": "folder"
+    },
+    {
+      "file_id": 4532,
+      "path": "Hồng share/0000862_01GTKT0-003_CG-21E.xml",
+      "type": "file"
+    },
+    {
+      "file_id": 4535,
+      "path": "Hồng share/000087-TL.txt",
+      "type": "file"
+    },
+    {
+      "file_id": 4533,
+      "path": "Hồng share/BD_29_16082022.xml",
+      "type": "file"
+    },
+    {
+      "file_id": 4534,
+      "path": "Hồng share/Drawing2.vsdx",
+      "type": "file"
+    },
+    {
+      "file_id": 4530,
+      "path": "Hồng share/Giấy cam kết TC&TK.docx",
+      "type": "file"
+    },
+    {
+      "file_id": 4531,
+      "path": "Hồng share/Huyen_QLDM tài liệu _ Tiện ích bảng kê_1679626297.vsdx",
+      "type": "file"
+    },
+    {
+      "file_id": 4536,
+      "path": "Hồng share/LuongTTT_QLnhomnguoidung_Phanquyen.vsdx",
+      "type": "file"
+    },
+    {
+      "file_id": 5715,
+      "path": "TestOCR/",
+      "type": "folder"
+    },
+    {
+      "file_id": 5809,
+      "path": "TestOCR/Test_OCR.png",
+      "type": "file"
+    },
+    {
+      "file_id": 5807,
+      "path": "TestOCR/hóa đơn.pdf",
+      "type": "file"
+    },
+    {
+      "file_id": 5808,
+      "path": "TestOCR/test_ocr.pdf",
+      "type": "file"
+    },
+    {
+      "file_id": 5119,
+      "path": "TungNS_Resume.pdf",
+      "type": "file"
+    },
+    {
+      "file_id": 5505,
+      "path": "VB 55 1303_Tổ+chức+Hội+thao_miền+Bắc_2023.pdf",
+      "type": "file"
+    },
+    {
+      "file_id": 6773,
+      "path": "a (6).xml",
+      "type": "file"
+    },
+    {
+      "file_id": 5909,
+      "path": "requirements.txt",
+      "type": "file"
+    },
+    {
+      "file_id": 6232,
+      "path": "son.png",
+      "type": "file"
+    },
+    {
+      "file_id": 6247,
+      "path": "son_OCR.pdf",
+      "type": "file"
+    }
+  ]
+}
