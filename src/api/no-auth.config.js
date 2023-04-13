@@ -9,7 +9,7 @@ import VueAxios from "vue-axios";
 const httpNoAuth = {
   init() {
     Vue.use(VueAxios, axios);
-    Vue.axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL;
+    Vue.axios.defaults.baseURL = process.env.VUE_APP_API_URL;
   },
 
   /**
