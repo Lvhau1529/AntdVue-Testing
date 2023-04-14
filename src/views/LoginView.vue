@@ -63,7 +63,7 @@
 function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some((field) => fieldsError[field]);
 }
-import Auth from "@/services/index";
+import Auth from "@/services/auth/index";
 import { setToken } from "@/helper/auth";
 
 export default {

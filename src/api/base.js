@@ -40,9 +40,13 @@ const http = {
    * @param config
    * @returns {*}
    */
-  post(resource, params, config) {
+  post(resource, params) {
     this.setHeader();
-    return Vue.axios.post(`${resource}`, params, config);
+    return Vue.axios.post(`${resource}`, params, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   },
 
   /**

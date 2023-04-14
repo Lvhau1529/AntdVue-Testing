@@ -3,6 +3,7 @@
     {{ result }}
     {{ value }}
     {{ selected }}
+    {{ folderSelectd }}
     <div style="margin-bottom: 16px">
       <a-button
         type="primary"
@@ -69,48 +70,7 @@
         </div>
       </div>
     </div>
-
-    <a-table
-      ref="aTable"
-      :row-selection="{
-        selectedRowKeys: selectedRowKeys,
-        onChange: onSelectChange,
-      }"
-      :columns="columns"
-      :data-source="data"
-      :pagination="pagination"
-    >
-      <template slot-scope="text, record, index" slot="stt">
-        <div style="text-align: center">
-          {{ (pagination.current - 1) * pagination.pageSize + index + 1 }}
-        </div>
-      </template>
-
-      <template slot="intergationERP" slot-scope="intergationERP">
-        <a-tag :color="intergationERP.length > 5 ? 'pink' : 'green'">
-          {{ intergationERP }}
-        </a-tag>
-      </template>
-
-      <template slot="contractCheck" slot-scope="contractCheck">
-        <a-tag :color="contractCheck.length > 5 ? 'pink' : 'green'">
-          {{ contractCheck }}
-        </a-tag>
-      </template>
-      <template slot="footer">
-        <div>
-          <a-pagination
-            v-model="pagination.current"
-            :current="pagination.current"
-            show-size-changer
-            show-quick-jumper
-            :default-current="1"
-            :total="pagination.total"
-            @showSizeChange="handlePageSizeChange"
-          />
-        </div>
-      </template>
-    </a-table>
+    <TableField :folderSelectd="folderSelectd" />
     <PopupCustom
       ref="PopupCustom"
       :content="modal.content"
@@ -122,13 +82,12 @@
 </template>
 
 <script>
-import data from "@/data/mock_data.json";
 import list_folder from "@/data/list_folder.json";
 import PopupCustom from "@/components/PopupCustom.vue";
-import WeatherService from "@/services/index";
 import SelectField from "@/components/SelectField.vue";
 import ButtonField from "@/components/ButtonField.vue";
 import SearchField from "./SearchField.vue";
+import TableField from "./TableField.vue";
 
 export default {
   name: "HelloWorld",
@@ -137,57 +96,16 @@ export default {
     SelectField,
     ButtonField,
     SearchField,
+    TableField,
   },
   data() {
     return {
       data: [],
-      columns: [
-        {
-          title: "STT",
-          dataIndex: "stt",
-          width: "60px",
-          key: "stt",
-          scopedSlots: { customRender: "stt" },
-        },
-        {
-          title: "Mẫu hoá đơn",
-          dataIndex: "invoice",
-        },
-        { title: "Ký hiệu hoá đơn", dataIndex: "symbolInvoice" },
-        { title: "Ngày lập hoá đơn", dataIndex: "invoiceDate" },
-        {
-          title: "Tên người bán",
-          dataIndex: "nameSeller",
-          ellipsis: true,
-          width: "200px",
-        },
-        { title: "Mã số thuế người bán", dataIndex: "taxCodeSeller" },
-        { title: "Giá trị trước thuế", dataIndex: "preTax" },
-        { title: "GTGT", dataIndex: "vat" },
-        {
-          title: "Tổng GT thanh toán",
-          dataIndex: "totalPayment",
-          ellipsis: true,
-        },
-        {
-          title: "Trạng thái tích hợp ERP",
-          dataIndex: "intergationERP",
-          scopedSlots: { customRender: "intergationERP" },
-        },
-        {
-          title: "Trạng thái kiểm tra hợp đồng",
-          dataIndex: "contractCheck",
-          scopedSlots: { customRender: "contractCheck" },
-        },
-      ],
+
       selected: null,
+      folderSelectd: "",
       selectedRowKeys: [], // Check here to configure the default column
       loading: false,
-      pagination: {
-        current: 1, // the current page number
-        pageSize: 10, // the number of items per page
-        total: 0, // the total number of items
-      },
       modal: {},
       result: null,
       value: null,
@@ -213,39 +131,34 @@ export default {
       ],
       treeData: [
         {
-          title: "Node 1",
-          value: "1",
+          title: "/",
+          value: "/",
           key: "1",
           children: [
-            { title: "Child Node 1-1", value: "1-1", key: "1-1" },
-            { title: "Child Node 1-2", value: "1-2", key: "1-2" },
+            { title: "Bug tìm kiếm", value: "Bug tìm kiếm", key: "1-1" },
+            { title: "Hồng share", value: "Hồng share", key: "1-2" },
           ],
         },
-        {
-          title: "Node 2",
-          value: "2",
-          key: "2",
-          children: [
-            {
-              title: "Child Node 2-1",
-              value: "2-1",
-              key: "2-1",
-              children: [{ title: "Child Node 2-1-1", value: "2-1-1" }],
-            },
-            { title: "Child Node 2-2", value: "2-2", key: "2-2" },
-          ],
-        },
+        // {
+        //   title: "Node 2",
+        //   value: "2",
+        //   key: "2",
+        //   children: [
+        //     {
+        //       title: "Child Node 2-1",
+        //       value: "2-1",
+        //       key: "2-1",
+        //       children: [{ title: "Child Node 2-1-1", value: "2-1-1" }],
+        //     },
+        //     { title: "Child Node 2-2", value: "2-2", key: "2-2" },
+        //   ],
+        // },
         // Add more nodes as needed
       ],
     };
   },
   mounted() {
-    this.data = data;
-    this.formatData();
-    this.pagination.total = this.data && this.data.length;
-    this.$nextTick(() => {
-      console.log(this.$refs.aTable);
-    });
+    // this.formatData();
   },
   computed: {
     hasSelected() {
@@ -299,23 +212,9 @@ export default {
         this.selectedRowKeys = [];
       }, 1000);
     },
-    onSelectChange(selectedRowKeys) {
-      // eslint-disable-next-line no-console
-      console.log("selectedRowKeys changed: ", selectedRowKeys);
-      this.selectedRowKeys = selectedRowKeys;
-    },
-    handlePageSizeChange(current, pageSize) {
-      console.log(current, pageSize);
-      this.pagination.pageSize = pageSize;
-    },
-    async onSearch(search) {
-      await WeatherService.searchByCity(search)
-        .then((res) => {
-          this.result = res;
-        })
-        .catch((err) => {
-          console.log("Loi roi", err);
-        });
+
+    onSearch(search) {
+      console.log("search", search);
     },
     handleOpenPopup(type) {
       switch (type) {
@@ -342,7 +241,7 @@ export default {
       });
     },
     handleChange(value) {
-      console.log(value);
+      this.folderSelectd = value;
     },
   },
 };
