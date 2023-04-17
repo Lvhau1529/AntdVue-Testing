@@ -13,6 +13,26 @@
       "type": "file"
     },
     {
+      "file_id": 11561,
+      "path": "111/",
+      "type": "folder"
+    },
+    {
+      "file_id": 11575,
+      "path": "111/20211222_VB_DEN_6839_MOBIFONE-CSKH-KHCN_20211222_20211222_090206.pdf",
+      "type": "file"
+    },
+    {
+      "file_id": 12748,
+      "path": "111/20220916_Bao cao hoan thanh phat trien MobiFone Meeting_V01.pdf",
+      "type": "file"
+    },
+    {
+      "file_id": 12747,
+      "path": "111/20221026_Trien khai he thong khao sat trai nghiem khach hang CEI end.pdf",
+      "type": "file"
+    },
+    {
       "file_id": 6201,
       "path": "1C22TAD_00000009_1676217770 - Copy (2).xml",
       "type": "file"
@@ -60,6 +80,11 @@
     {
       "file_id": 4594,
       "path": "BIGDATA-00000068-31012023.xml",
+      "type": "file"
+    },
+    {
+      "file_id": 7094,
+      "path": "BIGDATA-00000223-27032023.xml",
       "type": "file"
     },
     {
@@ -188,6 +213,11 @@
       "type": "file"
     },
     {
+      "file_id": 8078,
+      "path": "Share cho hằng không có quyền chỉnh sửa.pdf",
+      "type": "file"
+    },
+    {
       "file_id": 5715,
       "path": "TestOCR/",
       "type": "folder"
@@ -223,8 +253,58 @@
       "type": "file"
     },
     {
+      "file_id": 8213,
+      "path": "chia sẻ cho hằng không có quyền chỉnh sửa.pdf",
+      "type": "file"
+    },
+    {
+      "file_id": 9786,
+      "path": "không sửa file này hằng nhé.pdf",
+      "type": "file"
+    },
+    {
       "file_id": 5909,
       "path": "requirements.txt",
+      "type": "file"
+    },
+    {
+      "file_id": 7095,
+      "path": "s/",
+      "type": "folder"
+    },
+    {
+      "file_id": 8485,
+      "path": "s/20230302_To_Cong_Nghe.pdf",
+      "type": "file"
+    },
+    {
+      "file_id": 7099,
+      "path": "s/BIGDATA-00000061-15082022.xml",
+      "type": "file"
+    },
+    {
+      "file_id": 7096,
+      "path": "s/BIGDATA-00000223-27032023.xml",
+      "type": "file"
+    },
+    {
+      "file_id": 7098,
+      "path": "s/BIGDATA-65-08042022.xml",
+      "type": "file"
+    },
+    {
+      "file_id": 7100,
+      "path": "s/BIGDATA_00000237_11042023.xml",
+      "type": "file"
+    },
+    {
+      "file_id": 7101,
+      "path": "s/BIGDATA_0000244_11042023.xml",
+      "type": "file"
+    },
+    {
+      "file_id": 7189,
+      "path": "s/CPaaS Workgroup 20230323 draft SENT.pdf",
       "type": "file"
     },
     {
@@ -235,6 +315,11 @@
     {
       "file_id": 6247,
       "path": "son_OCR.pdf",
+      "type": "file"
+    },
+    {
+      "file_id": 22828,
+      "path": "test_ocr.pdf",
       "type": "file"
     }
   ]
