@@ -2,7 +2,8 @@
   <div>
     <a-table
       ref="aTable"
-      :row-key="(record) => record.invoice"
+      :loading="loading"
+      :row-key="(record) => record.ecm_path"
       :row-selection="{
         selectedRowKeys: selectedRowKeys,
         onChange: onSelectChange,
@@ -17,7 +18,23 @@
         </div>
       </template>
 
-      <template slot="intergationERP" slot-scope="intergationERP">
+      <template slot="ngay_lap_hoa_don" slot-scope="ngay_lap_hoa_don">
+        <span>{{ ngay_lap_hoa_don | formatDate }}</span>
+      </template>
+
+      <template slot="tong_tien_khong_thue" slot-scope="tong_tien_khong_thue">
+        <span>{{ tong_tien_khong_thue | formatMoney }}</span>
+      </template>
+
+      <template slot="tong_tien_thue" slot-scope="tong_tien_thue">
+        <span>{{ tong_tien_thue | formatMoney }}</span>
+      </template>
+
+      <template slot="tong_gt_thanh_toan" slot-scope="tong_gt_thanh_toan">
+        <span>{{ tong_gt_thanh_toan }}</span>
+      </template>
+
+      <!-- <template slot="intergationERP" slot-scope="intergationERP">
         <a-tag :color="intergationERP.length > 5 ? 'pink' : 'green'">
           {{ intergationERP }}
         </a-tag>
@@ -27,7 +44,7 @@
         <a-tag :color="contractCheck.length > 5 ? 'pink' : 'green'">
           {{ contractCheck }}
         </a-tag>
-      </template>
+      </template> -->
       <template slot="footer">
         <div>
           <a-pagination
@@ -46,14 +63,13 @@
 </template>
 
 <script>
-import data from "@/data/mock_data.json";
+// import data from "@/data/mock_data.json";
 import ECM from "@/services/ecm";
-// import { addTask } from "@/services/todolist";
 
 export default {
   name: "TableField",
   props: {
-    folderSelectd: {
+    folderSelected: {
       type: String,
       default: "",
     },
@@ -61,6 +77,7 @@ export default {
   data() {
     return {
       data: null,
+      loading: true,
       columns: [
         {
           title: "STT",
@@ -71,21 +88,35 @@ export default {
         },
         {
           title: "Mẫu hoá đơn",
-          dataIndex: "invoice",
+          dataIndex: "ecm_path",
+          ellipsis: true,
         },
-        { title: "Ký hiệu hoá đơn", dataIndex: "symbolInvoice" },
-        { title: "Ngày lập hoá đơn", dataIndex: "invoiceDate" },
+        { title: "Ký hiệu hoá đơn", dataIndex: "ky_hieu_hoa_don" },
+        {
+          title: "Ngày lập hoá đơn",
+          dataIndex: "ngay_lap_hoa_don",
+          scopedSlots: { customRender: "ngay_lap_hoa_don" },
+        },
         {
           title: "Tên người bán",
-          dataIndex: "nameSeller",
+          dataIndex: "ten_nguoi_ban",
           width: "200px",
         },
-        { title: "Mã số thuế người bán", dataIndex: "taxCodeSeller" },
-        { title: "Giá trị trước thuế", dataIndex: "preTax" },
-        { title: "GTGT", dataIndex: "vat" },
+        { title: "Mã số thuế người bán", dataIndex: "mst_nguoi_ban" },
+        {
+          title: "Giá trị trước thuế",
+          dataIndex: "tong_tien_khong_thue",
+          scopedSlots: { customRender: "tong_tien_khong_thue" },
+        },
+        {
+          title: "GTGT",
+          dataIndex: "tong_tien_thue",
+          scopedSlots: { customRender: "tong_tien_thue" },
+        },
         {
           title: "Tổng GT thanh toán",
-          dataIndex: "totalPayment",
+          dataIndex: "tong_gt_thanh_toan",
+          scopedSlots: { customRender: "tong_gt_thanh_toan" },
         },
         {
           title: "Trạng thái tích hợp ERP",
@@ -104,63 +135,33 @@ export default {
         pageSize: 10, // the number of items per page
         total: 0, // the total number of items
       },
-      // pagination: {
-      //   ecm_path: "/",
-      //   page: 1,
-      //   page_size: 10,
-      //   filter: "",
-      // },
       selectedRowKeys: [],
     };
   },
   watch: {
-    // folderSelectd: {
-    //   handler(val) {
-    //     this.pagination.ecm_path = val;
-    //   },
-    // },
+    folderSelected: {
+      handler() {
+        this.getDataTable();
+      },
+    },
     // pagination: {
     //   handler() {
+    //     console.log("bbbb");
     //     this.getDataTable();
     //   },
     //   deep: true,
     // },
-    pagination: {
-      handler(val) {
-        console.log(val);
-      },
-      deep: true,
-    },
   },
   mounted() {
     // this.getListFile();
-    // this.getDataTable();
-    this.data = data;
-    this.pagination.total = this.data && this.data.length;
-    this.addTodo();
+    this.getDataTable();
+    // this.data = data;
   },
   methods: {
-    addTodo() {
-      const payload = {
-        name: "abc",
-        createBy: "trangntt",
-        status: false,
-        id: "4",
-      };
-      // addTask(payload)
-      //   .then((res) => {
-      //     console.log(res);
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
-      ECM.AddTask(payload)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    totalPayment(totalNoTax, totalTax) {
+      const cal =
+        parseFloat(Math.round(totalNoTax)) + parseFloat(Math.round(totalTax));
+      return cal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
     async getListFile() {
       await ECM.ListFile({ ecm_path: "" })
@@ -172,10 +173,26 @@ export default {
         });
     },
     async getDataTable() {
-      await ECM.ListInvoice(this.pagination)
+      this.loading = true;
+      let payload = {
+        ecm_path: this.folderSelected,
+        page: this.pagination.current,
+        page_size: this.pagination.pageSize,
+        filter: "",
+      };
+      await ECM.ListInvoice(payload)
         .then((res) => {
-          this.data = res.data;
-          this.pagination.total = this.data && this.data.length;
+          this.data = res?.data.details;
+          // add col tong_gt_thanh_toan
+          this.data.map((item) => {
+            item.tong_gt_thanh_toan = this.totalPayment(
+              item.tong_tien_khong_thue,
+              item.tong_tien_thue
+            );
+          });
+          this.pagination.total = res?.data?.details.length;
+          this.loading = false;
+          // this.data = res.data;
         })
         .catch((err) => {
           console.log("err", err);

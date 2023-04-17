@@ -3,7 +3,7 @@
     {{ result }}
     {{ value }}
     {{ selected }}
-    {{ folderSelectd }}
+    {{ folderSelected }}
     {{ selectedRowKeys }}
     <div style="margin-bottom: 16px">
       <a-button
@@ -26,11 +26,14 @@
         <div>
           <a-tree-select
             :tree-data="treeData"
-            :show-search="true"
             :dropdown-style="{ maxHeight: '400px' }"
-            style="width: 300px"
+            style="min-width: 220px"
             allow-clear
-            placeholder="Please select"
+            placeholder="Thư mục"
+            defaultValue="/"
+            tree-default-expand-all
+            :tree-icon="true"
+            :tree-line="false"
             @change="handleChange"
           >
           </a-tree-select>
@@ -69,7 +72,7 @@
       </div>
     </div>
     <TableField
-      :folderSelectd="folderSelectd"
+      :folderSelected="folderSelected"
       @selectedRowKeys="selectedRowKeys = $event"
     />
     <PopupCustom
@@ -104,7 +107,7 @@ export default {
       data: [],
 
       selected: null,
-      folderSelectd: "",
+      folderSelected: "/",
       selectedRowKeys: [], // Check here to configure the default column
       loading: false,
       modal: {},
@@ -167,6 +170,14 @@ export default {
     },
   },
   methods: {
+    renderIcon(node) {
+      console.log(node);
+      return false;
+      // if (node.isLeaf) {
+      //   return <a-icon type="file" />;
+      // }
+      // return <a-icon type="folder" />;
+    },
     formatData() {
       let folderName = "";
       let itemTree = {
@@ -242,7 +253,7 @@ export default {
       });
     },
     handleChange(value) {
-      this.folderSelectd = value;
+      this.folderSelected = value;
     },
   },
 };
