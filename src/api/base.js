@@ -18,7 +18,7 @@ const http = {
   setHeader() {
     this.init();
     if (getToken()) {
-      Vue.axios.defaults.headers["Authorization"] = `${getToken()}`;
+      Vue.axios.defaults.headers["Authorization"] = `Bearer ${getToken()}`;
     }
   },
 
