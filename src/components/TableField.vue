@@ -2,6 +2,7 @@
   <div>
     <a-table
       ref="aTable"
+      :row-key="(record) => record.invoice"
       :row-selection="{
         selectedRowKeys: selectedRowKeys,
         onChange: onSelectChange,
@@ -12,7 +13,7 @@
     >
       <template slot-scope="text, record, index" slot="stt">
         <div style="text-align: center">
-          {{ (pagination.page - 1) * pagination.page_size + index + 1 }}
+          {{ (pagination.page - 1) * pagination.pageSize + index + 1 }}
         </div>
       </template>
 
@@ -36,7 +37,7 @@
             show-quick-jumper
             :default-page="1"
             :total="pagination.total"
-            @showSizeChange="handlePageSizeChange"
+            @change="handlePageSizeChange"
           />
         </div>
       </template>
@@ -45,8 +46,9 @@
 </template>
 
 <script>
-// import data from "@/data/mock_data.json";
+import data from "@/data/mock_data.json";
 import ECM from "@/services/ecm";
+// import { addTask } from "@/services/todolist";
 
 export default {
   name: "TableField",
@@ -76,7 +78,6 @@ export default {
         {
           title: "Tên người bán",
           dataIndex: "nameSeller",
-          ellipsis: true,
           width: "200px",
         },
         { title: "Mã số thuế người bán", dataIndex: "taxCodeSeller" },
@@ -85,7 +86,6 @@ export default {
         {
           title: "Tổng GT thanh toán",
           dataIndex: "totalPayment",
-          ellipsis: true,
         },
         {
           title: "Trạng thái tích hợp ERP",
@@ -98,41 +98,70 @@ export default {
           scopedSlots: { customRender: "contractCheck" },
         },
       ],
-      // pagination: {
-      //   page: 1, // the page page number
-      //   page_size: 10, // the number of items per page
-      //   total: 0, // the total number of items
-      //   filter: "",
-      //   ecm_path: "",
-      // },
       pagination: {
-        ecm_path: "/",
-        page: 1,
-        page_size: 10,
-        filter: "",
+        current: 1,
+        page: 1, // the page page number
+        pageSize: 10, // the number of items per page
+        total: 0, // the total number of items
       },
+      // pagination: {
+      //   ecm_path: "/",
+      //   page: 1,
+      //   page_size: 10,
+      //   filter: "",
+      // },
       selectedRowKeys: [],
     };
   },
   watch: {
-    folderSelectd: {
-      handler(val) {
-        this.pagination.ecm_path = val;
-      },
-    },
+    // folderSelectd: {
+    //   handler(val) {
+    //     this.pagination.ecm_path = val;
+    //   },
+    // },
+    // pagination: {
+    //   handler() {
+    //     this.getDataTable();
+    //   },
+    //   deep: true,
+    // },
     pagination: {
-      handler() {
-        this.getDataTable();
+      handler(val) {
+        console.log(val);
       },
       deep: true,
     },
   },
   mounted() {
-    this.getListFile();
-    this.getDataTable();
-    // this.data = data;
+    // this.getListFile();
+    // this.getDataTable();
+    this.data = data;
+    this.pagination.total = this.data && this.data.length;
+    this.addTodo();
   },
   methods: {
+    addTodo() {
+      const payload = {
+        name: "abc",
+        createBy: "trangntt",
+        status: false,
+        id: "4",
+      };
+      // addTask(payload)
+      //   .then((res) => {
+      //     console.log(res);
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
+      ECM.AddTask(payload)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     async getListFile() {
       await ECM.ListFile({ ecm_path: "" })
         .then((res) => {
@@ -153,11 +182,13 @@ export default {
         });
     },
     onSelectChange(selectedRowKeys) {
-      // eslint-disable-next-line no-console
       this.selectedRowKeys = selectedRowKeys;
+      this.$emit("selectedRowKeys", selectedRowKeys);
     },
-    handlePageSizeChange(page, page_size) {
-      this.pagination.page_size = page_size;
+    handlePageSizeChange(page, pageSize) {
+      console.log("page", page, "pageSize", pageSize);
+      this.pagination.current = page;
+      this.pagination.pageSize = pageSize;
     },
   },
 };

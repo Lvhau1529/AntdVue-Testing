@@ -44,7 +44,7 @@ const http = {
     this.setHeader();
     return Vue.axios.post(`${resource}`, params, {
       headers: {
-        "Content-Type": "application/json",
+        "content-type": "application/json",
       },
     });
   },
