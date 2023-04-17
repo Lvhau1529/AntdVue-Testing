@@ -4,6 +4,7 @@
     {{ value }}
     {{ selected }}
     {{ folderSelectd }}
+    {{ selectedRowKeys }}
     <div style="margin-bottom: 16px">
       <a-button
         type="primary"
@@ -56,9 +57,6 @@
             title="Kiểm tra tính hợp lệ"
             @clickBtn="handleOpenPopup('CheckVerify')"
           />
-          <!-- <a-button @click="handleOpenPopup('CheckVerify')" type="primary">
-            Kiểm tra tính hợp lệ
-          </a-button> -->
         </div>
         <div>
           <a-button type="primary" @click="handleOpenPopup('IntergationERP')">
@@ -70,7 +68,10 @@
         </div>
       </div>
     </div>
-    <TableField :folderSelectd="folderSelectd" />
+    <TableField
+      :folderSelectd="folderSelectd"
+      @selectedRowKeys="selectedRowKeys = $event"
+    />
     <PopupCustom
       ref="PopupCustom"
       :content="modal.content"

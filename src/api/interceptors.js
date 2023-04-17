@@ -1,46 +1,33 @@
-import { getToken, removeToken } from "src/helper/auth";
+import axios from "axios";
+import TokenService from "@/helpers/token";
 
-function configRequest(instance) {
-  instance?.interceptors?.request?.use(
-    function (config) {
-      const token = getToken();
-      if (token) {
-        config.headers = Object.assign(config.headers, {
-          Authorization: token,
-        });
-      }
-      return config;
-    },
-    function (err) {
-      console.log("err", JSON.stringify(err));
-      return Promise.reject(JSON.parse(JSON.stringify(err)));
-    }
-  );
-}
+const axiosInstance = axios.create({
+  baseURL: process.env.VUE_APP_API_URL,
+});
 
-function configResponse(instance) {
-  instance.interceptors.response.use(
-    (response) => {
-      return response;
-    },
-    (error) => {
-      if (error.response) {
-        if (
-          (error.response.status === 401 || error.response.status === 403) &&
-          !window.location.pathname.includes("login")
-        ) {
-          removeToken();
-        }
-        return {
-          data: error?.response?.data,
-          status: error?.response?.status,
-        };
-      }
-    }
-  );
-}
+axiosInstance.interceptors.request.use((request) => {
+  if (TokenService.getToken()) {
+    request.headers = {
+      "Content-Type": "application/json",
+      ...TokenService.getHeader(),
+    };
+  }
 
-export default {
-  configRequest,
-  configResponse,
-};
+  request.params = { ...request.params, v: Date.now() };
+
+  return request;
+});
+
+axiosInstance.interceptors.response.use(
+  (response) => {
+    response.data.success = true;
+    return response.data;
+  },
+  () => {
+    return {
+      success: false,
+    };
+  }
+);
+
+export default axiosInstance;
