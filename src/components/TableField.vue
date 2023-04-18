@@ -41,15 +41,13 @@
       </template>
 
       <template slot="trang_thai_HD" slot-scope="file_id">
-        <!-- <span>aaa {{ checkVaildInvoice(file_id) }}</span> -->
-        {{ result }} {{ file_id }}
-        <!-- <a-tag
-          :color="
-            checkVaildInvoice(file_id) === 'Không hợp lệ' ? 'pink' : 'green'
-          "
-        >
-          {{ checkVaildInvoice(file_id) }}
-        </a-tag> -->
+        <ItemInvoice
+          ref="ItemInvoice"
+          :fileId="file_id"
+          :selectedRowKeys="selectedRowKeys"
+          :reload="reloadCheck"
+          @checkVaildSuccess="handleCheckValidSuccess"
+        />
       </template>
       <template slot="footer">
         <div>
@@ -71,6 +69,7 @@
 <script>
 // import data from "@/data/mock_data.json";
 import ECM from "@/services/ecm";
+import ItemInvoice from "./ItemInvoice.vue";
 
 export default {
   name: "TableField",
@@ -79,6 +78,9 @@ export default {
       type: String,
       default: "",
     },
+  },
+  components: {
+    ItemInvoice,
   },
   data() {
     return {
@@ -94,8 +96,7 @@ export default {
         },
         {
           title: "Mẫu hoá đơn",
-          dataIndex: "ecm_path",
-          ellipsis: true,
+          dataIndex: "mau_hoa_don",
         },
         { title: "Ký hiệu hoá đơn", dataIndex: "ky_hieu_hoa_don" },
         {
@@ -106,7 +107,7 @@ export default {
         {
           title: "Tên người bán",
           dataIndex: "ten_nguoi_ban",
-          width: "200px",
+          width: "380px",
         },
         { title: "Mã số thuế người bán", dataIndex: "mst_nguoi_ban" },
         {
@@ -140,10 +141,11 @@ export default {
         page: 1, // the page page number
         pageSize: 10, // the number of items per page
         total: 0, // the total number of items
+        filter: "",
       },
       selectedRowKeys: [],
-      result: [],
       listFileId: [],
+      reloadCheck: false,
     };
   },
   watch: {
@@ -152,19 +154,12 @@ export default {
         this.getDataTable();
       },
     },
-    result: {
-      handler(val) {
-        console.log("val", val);
+    pagination: {
+      handler() {
+        this.getDataTable();
       },
       deep: true,
     },
-    // pagination: {
-    //   handler() {
-    //     console.log("bbbb");
-    //     this.getDataTable();
-    //   },
-    //   deep: true,
-    // },
   },
   mounted() {
     // this.getListFile();
@@ -176,19 +171,6 @@ export default {
       const cal =
         parseFloat(Math.round(totalNoTax)) + parseFloat(Math.round(totalTax));
       return cal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    },
-    checkVaildInvoice(id_file) {
-      const payload = { ecm_file_id: id_file };
-      ECM.CheckValidInvoice(payload)
-        .then(async (res) => {
-          const data = await res?.data?.details[0].invoice_checked
-            .is_modified_invoice.result;
-          return data;
-        })
-        .catch((err) => {
-          this.$message.error(err.response.data.message);
-          return "Không";
-        });
     },
     async getListFile() {
       await ECM.ListFile({ ecm_path: "" })
@@ -205,7 +187,7 @@ export default {
         ecm_path: this.folderSelected,
         page: this.pagination.current,
         page_size: this.pagination.pageSize,
-        filter: "",
+        filter: this.pagination.filter,
       };
       await ECM.ListInvoice(payload)
         .then((res) => {
@@ -218,7 +200,6 @@ export default {
             );
             item.trang_thai_ERP = "Chưa tích hợp";
             item.trang_thai_HD = item.file_id;
-            this.listFileId.push(item.file_id);
           });
           this.pagination.total = res?.data?.details.length;
           this.loading = false;
@@ -227,20 +208,18 @@ export default {
         .catch((err) => {
           this.$message.error(err.response.data.message);
         });
-      // await Promise.all(
-      //   this.data.map((item) => {
-      //     return this.checkVaildInvoice(item.file_id);
-      //   })
-      // );
-      this.result = await Promise.all(
-        this.listFileId.map((_) => {
-          return this.checkVaildInvoice(_);
-        })
-      );
     },
     onSelectChange(selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys;
       this.$emit("selectedRowKeys", selectedRowKeys);
+    },
+    handleCheckValidSuccess() {
+      this.selectedRowKeys = [];
+      this.$emit("checkVaildSuccess");
+    },
+    handleCheckValidInvoice() {
+      console.log("aaaa");
+      this.reloadCheck = !this.reloadCheck;
     },
     handlePageSizeChange(page, pageSize) {
       console.log("page", page, "pageSize", pageSize);

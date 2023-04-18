@@ -65,10 +65,7 @@ export default {
     },
     handleOk() {
       this.loading = true;
-      setTimeout(() => {
-        this.visible = false;
-        this.loading = false;
-      }, 2000);
+      this.$emit("ok");
     },
     handleCancel() {
       this.destroyAll();

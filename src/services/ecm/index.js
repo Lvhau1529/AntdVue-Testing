@@ -13,6 +13,9 @@ class ECM {
   CheckValidInvoice(payload) {
     return http.post("xml/check-valid-invoice-by-id", payload);
   }
+  ExportFile(payload) {
+    return http.post("folder/download-invoices", payload);
+  }
 }
 
 export default new ECM();
