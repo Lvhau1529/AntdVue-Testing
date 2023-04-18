@@ -3,7 +3,7 @@
     <a-table
       ref="aTable"
       :loading="loading"
-      :row-key="(record) => record.ecm_path"
+      :row-key="(record) => record.file_id"
       :row-selection="{
         selectedRowKeys: selectedRowKeys,
         onChange: onSelectChange,
@@ -34,17 +34,23 @@
         <span>{{ tong_gt_thanh_toan }}</span>
       </template>
 
-      <!-- <template slot="intergationERP" slot-scope="intergationERP">
-        <a-tag :color="intergationERP.length > 5 ? 'pink' : 'green'">
-          {{ intergationERP }}
+      <template slot="trang_thai_ERP" slot-scope="trang_thai_ERP">
+        <a-tag :color="trang_thai_ERP === 'Chưa tích hợp' ? 'pink' : 'green'">
+          {{ trang_thai_ERP }}
         </a-tag>
       </template>
 
-      <template slot="contractCheck" slot-scope="contractCheck">
-        <a-tag :color="contractCheck.length > 5 ? 'pink' : 'green'">
-          {{ contractCheck }}
-        </a-tag>
-      </template> -->
+      <template slot="trang_thai_HD" slot-scope="file_id">
+        <!-- <span>aaa {{ checkVaildInvoice(file_id) }}</span> -->
+        {{ result }} {{ file_id }}
+        <!-- <a-tag
+          :color="
+            checkVaildInvoice(file_id) === 'Không hợp lệ' ? 'pink' : 'green'
+          "
+        >
+          {{ checkVaildInvoice(file_id) }}
+        </a-tag> -->
+      </template>
       <template slot="footer">
         <div>
           <a-pagination
@@ -120,13 +126,13 @@ export default {
         },
         {
           title: "Trạng thái tích hợp ERP",
-          dataIndex: "intergationERP",
-          scopedSlots: { customRender: "intergationERP" },
+          dataIndex: "trang_thai_ERP",
+          scopedSlots: { customRender: "trang_thai_ERP" },
         },
         {
           title: "Trạng thái kiểm tra hợp đồng",
-          dataIndex: "contractCheck",
-          scopedSlots: { customRender: "contractCheck" },
+          dataIndex: "trang_thai_HD",
+          scopedSlots: { customRender: "trang_thai_HD" },
         },
       ],
       pagination: {
@@ -136,6 +142,8 @@ export default {
         total: 0, // the total number of items
       },
       selectedRowKeys: [],
+      result: [],
+      listFileId: [],
     };
   },
   watch: {
@@ -143,6 +151,12 @@ export default {
       handler() {
         this.getDataTable();
       },
+    },
+    result: {
+      handler(val) {
+        console.log("val", val);
+      },
+      deep: true,
     },
     // pagination: {
     //   handler() {
@@ -163,13 +177,26 @@ export default {
         parseFloat(Math.round(totalNoTax)) + parseFloat(Math.round(totalTax));
       return cal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
+    checkVaildInvoice(id_file) {
+      const payload = { ecm_file_id: id_file };
+      ECM.CheckValidInvoice(payload)
+        .then(async (res) => {
+          const data = await res?.data?.details[0].invoice_checked
+            .is_modified_invoice.result;
+          return data;
+        })
+        .catch((err) => {
+          this.$message.error(err.response.data.message);
+          return "Không";
+        });
+    },
     async getListFile() {
       await ECM.ListFile({ ecm_path: "" })
         .then((res) => {
           console.log("res", res);
         })
         .catch((err) => {
-          console.log("err", err);
+          this.$message.error(err.response.data.message);
         });
     },
     async getDataTable() {
@@ -189,14 +216,27 @@ export default {
               item.tong_tien_khong_thue,
               item.tong_tien_thue
             );
+            item.trang_thai_ERP = "Chưa tích hợp";
+            item.trang_thai_HD = item.file_id;
+            this.listFileId.push(item.file_id);
           });
           this.pagination.total = res?.data?.details.length;
           this.loading = false;
           // this.data = res.data;
         })
         .catch((err) => {
-          console.log("err", err);
+          this.$message.error(err.response.data.message);
         });
+      // await Promise.all(
+      //   this.data.map((item) => {
+      //     return this.checkVaildInvoice(item.file_id);
+      //   })
+      // );
+      this.result = await Promise.all(
+        this.listFileId.map((_) => {
+          return this.checkVaildInvoice(_);
+        })
+      );
     },
     onSelectChange(selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys;

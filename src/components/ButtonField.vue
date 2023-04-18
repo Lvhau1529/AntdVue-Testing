@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-button @click="handleClick" :type="type">
+    <a-button @click="handleClick" :type="type" :disabled="disabled">
       {{ title }}
     </a-button>
   </div>
@@ -17,6 +17,10 @@ export default {
     type: {
       type: String,
       default: "primary",
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   methods: {

@@ -96,13 +96,14 @@ export default {
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
-          console.log("Received values of form: ", values);
           Auth.login(values)
             .then((res) => {
               this.setToken(res.data);
+              this.$message.success("Đăng nhập thành công");
+              this.$router.push("/");
             })
             .catch((err) => {
-              console.log("err", err);
+              this.$message.error(err.response.data.message);
             });
         }
       });

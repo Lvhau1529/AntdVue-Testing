@@ -10,6 +10,9 @@ class ECM {
   AddTask(payload) {
     return http.post("createTask", payload);
   }
+  CheckValidInvoice(payload) {
+    return http.post("xml/check-valid-invoice-by-id", payload);
+  }
 }
 
 export default new ECM();

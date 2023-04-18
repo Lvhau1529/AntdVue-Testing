@@ -56,13 +56,20 @@
       </div>
       <div class="box-header__right">
         <div>
-          <ButtonField
-            title="Kiểm tra tính hợp lệ"
-            @clickBtn="handleOpenPopup('CheckVerify')"
-          />
+          <a-button
+            :disabled="!hasSelected"
+            type="primary"
+            @click="handleOpenPopup('CheckVerify')"
+          >
+            Kiểm tra tính hợp lệ
+          </a-button>
         </div>
         <div>
-          <a-button type="primary" @click="handleOpenPopup('IntergationERP')">
+          <a-button
+            disabled
+            type="primary"
+            @click="handleOpenPopup('IntergationERP')"
+          >
             Tích hợp ERP
           </a-button>
         </div>
@@ -89,7 +96,6 @@
 import list_folder from "@/data/list_folder.json";
 import PopupCustom from "@/components/PopupCustom.vue";
 import SelectField from "@/components/SelectField.vue";
-import ButtonField from "@/components/ButtonField.vue";
 import SearchField from "./SearchField.vue";
 import TableField from "./TableField.vue";
 
@@ -98,14 +104,12 @@ export default {
   components: {
     PopupCustom,
     SelectField,
-    ButtonField,
     SearchField,
     TableField,
   },
   data() {
     return {
       data: [],
-
       selected: null,
       folderSelected: "/",
       selectedRowKeys: [], // Check here to configure the default column
@@ -232,9 +236,10 @@ export default {
       switch (type) {
         case "CheckVerify":
           this.modal = {
-            content: "Hoá đơn đã được tích hợp và nhập liệu trên hệ thống ERP",
-            subConent: "Bạn vui lòng không tích hợp lại",
-            hasCancel: false,
+            content:
+              this.selectedRowKeys.length > 1
+                ? "Bạn có chắc chắn muốn kiểm tra tính hợp lệ của các hoá đơn này không?"
+                : "Bạn có chắc chắn muốn kiểm tra tính hợp lệ của hoá đơn này không?",
           };
           break;
         case "IntergationERP":
