@@ -4,14 +4,17 @@
       ref="aTable"
       :loading="loading"
       :row-key="(record) => record.file_id"
-      :row-selection="{
-        selectedRowKeys: selectedRowKeys,
-        onChange: onSelectChange,
-      }"
+      :row-selection="rowSelection"
       :columns="columns"
       :data-source="data"
-      :pagination="pagination"
+      :pagination="false"
     >
+      <a-table-column
+        title="Column Title"
+        dataIndex="columnDataIndex"
+        :scopedSlots="{ customRender: 'ellipsis' }"
+        :ellipsis="{ tooltip: true }"
+      />
       <template slot-scope="text, record, index" slot="stt">
         <div style="text-align: center">
           {{ (pagination.page - 1) * pagination.pageSize + index + 1 }}
@@ -34,11 +37,11 @@
         <span>{{ tong_gt_thanh_toan }}</span>
       </template>
 
-      <template slot="trang_thai_ERP" slot-scope="trang_thai_ERP">
+      <!-- <template slot="trang_thai_ERP" slot-scope="trang_thai_ERP">
         <a-tag :color="trang_thai_ERP === 'Chưa tích hợp' ? 'pink' : 'green'">
           {{ trang_thai_ERP }}
         </a-tag>
-      </template>
+      </template> -->
 
       <template slot="trang_thai_HD" slot-scope="file_id">
         <ItemInvoice
@@ -54,10 +57,11 @@
           <a-pagination
             v-model="pagination.page"
             :page="pagination.page"
-            show-size-changer
-            show-quick-jumper
+            :page-size.sync="pagination.pageSize"
             :default-page="1"
-            :total="pagination.total"
+            :total="total"
+            show-quick-jumper
+            show-size-changer
             @change="handlePageSizeChange"
           />
         </div>
@@ -68,6 +72,7 @@
 
 <script>
 // import data from "@/data/mock_data.json";
+import { mapState, mapActions } from "vuex";
 import ECM from "@/services/ecm";
 import ItemInvoice from "./ItemInvoice.vue";
 
@@ -95,10 +100,22 @@ export default {
           scopedSlots: { customRender: "stt" },
         },
         {
-          title: "Mẫu hoá đơn",
+          title: "Tên file hoá đơn",
+          dataIndex: "invoice_file_name",
+        },
+        {
+          title: "Người upload",
+          dataIndex: "user_upload",
+        },
+        {
+          title: "Mẫu số hoá đơn",
           dataIndex: "mau_hoa_don",
         },
         { title: "Ký hiệu hoá đơn", dataIndex: "ky_hieu_hoa_don" },
+        {
+          title: "Số hoá đơn",
+          dataIndex: "so_hoa_don",
+        },
         {
           title: "Ngày lập hoá đơn",
           dataIndex: "ngay_lap_hoa_don",
@@ -107,13 +124,16 @@ export default {
         {
           title: "Tên người bán",
           dataIndex: "ten_nguoi_ban",
-          width: "380px",
         },
         { title: "Mã số thuế người bán", dataIndex: "mst_nguoi_ban" },
         {
           title: "Giá trị trước thuế",
           dataIndex: "tong_tien_khong_thue",
           scopedSlots: { customRender: "tong_tien_khong_thue" },
+        },
+        {
+          title: "Thuế suất",
+          dataIndex: "tax",
         },
         {
           title: "GTGT",
@@ -125,11 +145,11 @@ export default {
           dataIndex: "tong_gt_thanh_toan",
           scopedSlots: { customRender: "tong_gt_thanh_toan" },
         },
-        {
-          title: "Trạng thái tích hợp ERP",
-          dataIndex: "trang_thai_ERP",
-          scopedSlots: { customRender: "trang_thai_ERP" },
-        },
+        // {
+        //   title: "Trạng thái tích hợp ERP",
+        //   dataIndex: "trang_thai_ERP",
+        //   scopedSlots: { customRender: "trang_thai_ERP" },
+        // },
         {
           title: "Trạng thái kiểm tra hợp đồng",
           dataIndex: "trang_thai_HD",
@@ -137,13 +157,11 @@ export default {
         },
       ],
       pagination: {
-        current: 1,
         page: 1, // the page page number
         pageSize: 10, // the number of items per page
-        total: 0, // the total number of items
         filter: "",
       },
-      selectedRowKeys: [],
+      total: 0, // the total number of items
       listFileId: [],
       reloadCheck: false,
     };
@@ -162,30 +180,34 @@ export default {
     },
   },
   mounted() {
-    // this.getListFile();
     this.getDataTable();
     // this.data = data;
   },
+  computed: {
+    ...mapState({
+      selectedRowKeys: (state) => state.selectedRowKeys,
+    }),
+    rowSelection() {
+      return {
+        selectedRowKeys: this.selectedRowKeys,
+        onChange: (selectedRowKeys) => {
+          this.setSelectedRowKeys(selectedRowKeys);
+        },
+      };
+    },
+  },
   methods: {
+    ...mapActions(["setSelectedRowKeys"]),
     totalPayment(totalNoTax, totalTax) {
       const cal =
         parseFloat(Math.round(totalNoTax)) + parseFloat(Math.round(totalTax));
       return cal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
-    async getListFile() {
-      await ECM.ListFile({ ecm_path: "" })
-        .then((res) => {
-          console.log("res", res);
-        })
-        .catch((err) => {
-          this.$message.error(err.response.data.message);
-        });
-    },
     async getDataTable() {
       this.loading = true;
       let payload = {
         ecm_path: this.folderSelected,
-        page: this.pagination.current,
+        page: this.pagination.page,
         page_size: this.pagination.pageSize,
         filter: this.pagination.filter,
       };
@@ -198,10 +220,10 @@ export default {
               item.tong_tien_khong_thue,
               item.tong_tien_thue
             );
-            item.trang_thai_ERP = "Chưa tích hợp";
+            // item.trang_thai_ERP = "Chưa tích hợp";
             item.trang_thai_HD = item.file_id;
           });
-          this.pagination.total = res?.data?.details.length;
+          this.total = res?.data?.num_invoices;
           this.loading = false;
           // this.data = res.data;
         })
@@ -209,21 +231,14 @@ export default {
           this.$message.error(err.response.data.message);
         });
     },
-    onSelectChange(selectedRowKeys) {
-      this.selectedRowKeys = selectedRowKeys;
-      this.$emit("selectedRowKeys", selectedRowKeys);
-    },
     handleCheckValidSuccess() {
-      this.selectedRowKeys = [];
+      this.setSelectedRowKeys([]);
       this.$emit("checkVaildSuccess");
     },
     handleCheckValidInvoice() {
-      console.log("aaaa");
       this.reloadCheck = !this.reloadCheck;
     },
-    handlePageSizeChange(page, pageSize) {
-      console.log("page", page, "pageSize", pageSize);
-      this.pagination.current = page;
+    handlePageSizeChange(pageSize) {
       this.pagination.pageSize = pageSize;
     },
   },

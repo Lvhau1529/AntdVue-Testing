@@ -4,9 +4,19 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {},
+  state: {
+    selectedRowKeys: [],
+  },
   getters: {},
-  mutations: {},
-  actions: {},
+  mutations: {
+    SET_SELECTED_ROW_KEYS(state, payload) {
+      state.selectedRowKeys = payload;
+    },
+  },
+  actions: {
+    setSelectedRowKeys(context, payload) {
+      context.commit("SET_SELECTED_ROW_KEYS", payload);
+    },
+  },
   modules: {},
 });

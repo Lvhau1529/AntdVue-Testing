@@ -5,17 +5,25 @@
     {{ selected }}
     {{ folderSelected }}
     {{ selectedRowKeys }} -->
+    <h2 style="font-weight: bold; font-size: 20px">Danh sách chứng từ</h2>
+    <p v-if="folderSelected || search">
+      Bạn vui lòng chọn danh sách chứng từ Bạn có thể chọn danh sách những chứng
+      từ nhập liệu ERP hoặc chọn danh sách những chứng từ cần kiểm tra tính hợp
+      lệ
+    </p>
+    <p v-else>Bạn vui lòng chọn danh sách chứng từ</p>
     <div class="box-header">
       <div class="box-header__left">
         <div>
           <a-tree-select
+            allowClear
             :tree-data="treeData"
             :dropdown-style="{ maxHeight: '400px' }"
-            style="min-width: 220px"
+            style="min-width: 220px; cursor: pointer"
             placeholder="Thư mục"
-            defaultValue="/"
+            defaultValue=""
             tree-default-expand-all
-            @change="handleChange"
+            v-model="folderSelected"
           >
           </a-tree-select>
         </div>
@@ -39,7 +47,7 @@
           @search="onSearch"
         />
       </div>
-      <div class="box-header__right">
+      <div v-if="folderSelected || search" class="box-header__right">
         <div>
           <a-button
             :disabled="!hasSelected"
@@ -71,10 +79,10 @@
       </div>
     </div>
     <TableField
+      v-show="folderSelected || search"
       ref="TableField"
       :folderSelected="folderSelected"
       @checkVaildSuccess="handleCheckValidSuccess"
-      @selectedRowKeys="selectedRowKeys = $event"
     />
     <PopupCustom
       ref="PopupCustom"
@@ -89,8 +97,9 @@
 
 <script>
 // import list_folder from "@/data/list_folder.json";
-import PopupCustom from "@/components/PopupCustom.vue";
 // import SelectField from "@/components/SelectField.vue";
+import { mapState, mapActions } from "vuex";
+import PopupCustom from "@/components/PopupCustom.vue";
 import TableField from "@/components/TableField.vue";
 import ECM from "@/services/ecm/index";
 
@@ -105,13 +114,13 @@ export default {
     return {
       data: [],
       selected: null,
-      folderSelected: "/",
-      selectedRowKeys: [], // Check here to configure the default column
+      folderSelected: "",
       loading: false,
       loadingExport: false,
       modal: {},
       result: null,
       value: null,
+      search: "",
       erpStatus: [
         {
           value: "Đã tích hợp",
@@ -135,22 +144,34 @@ export default {
       treeData: [],
     };
   },
+  watch: {
+    folderSelected: {
+      handler() {
+        this.setSelectedRowKeys([]);
+      },
+    },
+  },
   mounted() {
     this.init();
   },
   computed: {
+    ...mapState({
+      selectedRowKeys: (state) => state.selectedRowKeys,
+    }),
     hasSelected() {
       return this.selectedRowKeys.length > 0;
     },
   },
   methods: {
+    ...mapActions(["setSelectedRowKeys"]),
     async init() {
       const payload = {
         ecm_path: "",
       };
       await ECM.ListFile(payload)
         .then((res) => {
-          this.handleListFolder(res.data.result);
+          const listFolder = this.handleListFolder(res.data.result);
+          this.treeData = [this.transformData(listFolder[0].children)];
         })
         .catch((err) => {
           this.$message.error(err.data.message);
@@ -172,6 +193,33 @@ export default {
           this.loadingExport = false;
         });
     },
+    transformData(data) {
+      const root = { title: "/", value: "/", children: [] };
+      const map = { "/": root };
+
+      data.forEach(({ value, children }) => {
+        const nodes = value.split("/");
+        let parent = root;
+        let path = "";
+        nodes.forEach((node) => {
+          if (node !== "") {
+            path += node + "/";
+            if (!map[path]) {
+              const newFolder = {
+                title: node,
+                value: path,
+                children: [],
+              };
+              map[path] = newFolder;
+              parent.children.push(newFolder);
+            }
+            parent = map[path];
+          }
+        });
+        parent.children = [...parent.children, ...children];
+      });
+      return root;
+    },
     handleListFolder(listFoler) {
       let result = [];
       for (const i of listFoler) {
@@ -190,12 +238,13 @@ export default {
           });
         }
       }
-      this.treeData = result;
-      // return result;
+      return result;
     },
     onSearch(search) {
-      console.log("search", search);
-      this.$refs.TableField.pagination.filter = search;
+      this.search = search;
+      this.$nextTick(() => {
+        this.$refs.TableField.pagination.filter = this.search;
+      });
     },
     handleOpenPopup(type) {
       switch (type) {
@@ -222,9 +271,6 @@ export default {
         this.$refs.PopupCustom.showModal();
       });
     },
-    handleChange(value) {
-      this.folderSelected = value;
-    },
     handleOk() {
       this.$nextTick(() => {
         this.$refs.TableField.handleCheckValidInvoice();
@@ -235,7 +281,6 @@ export default {
     },
     handleCheckValidSuccess() {
       this.loading = false;
-      this.selectedRowKeys = [];
     },
   },
 };
@@ -251,19 +296,24 @@ export default {
 
 <style lang="scss" scoped>
 .wrapper {
-  padding: 0 15px;
+  padding: 0 25px;
+  width: 100%;
   .box-header {
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
+
     &__left {
       display: flex;
+
       div {
         margin-right: 8px;
       }
     }
+
     &__right {
       display: flex;
+
       div {
         margin-left: 8px;
       }

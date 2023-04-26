@@ -2,8 +2,20 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
+import TokenService from "@/helper/token";
 
 Vue.use(VueRouter);
+
+function guardMyroute(to, from, next) {
+  var isAuthenticated = false;
+  if (TokenService.getToken()) isAuthenticated = true;
+  else isAuthenticated = false;
+  if (isAuthenticated) {
+    next();
+  } else {
+    next("/login");
+  }
+}
 
 const routes = [
   {
@@ -14,6 +26,7 @@ const routes = [
   {
     path: "/",
     name: "home",
+    beforeEnter: guardMyroute,
     component: HomeView,
   },
   {

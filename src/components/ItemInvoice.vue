@@ -32,8 +32,7 @@ export default {
   },
   watch: {
     reload: {
-      handler(val) {
-        console.log(val);
+      handler() {
         if (this.selectedRowKeys.includes(this.fileId)) {
           this.checkVaildInvoice(this.fileId, "reCheck");
         }
