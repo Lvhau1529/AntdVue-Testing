@@ -223,7 +223,7 @@ export default {
             // item.trang_thai_ERP = "Chưa tích hợp";
             item.trang_thai_HD = item.file_id;
           });
-          this.total = res?.data?.num_invoices;
+          this.total = res?.data?.num_total_files;
           this.loading = false;
           // this.data = res.data;
         })
@@ -238,7 +238,7 @@ export default {
     handleCheckValidInvoice() {
       this.reloadCheck = !this.reloadCheck;
     },
-    handlePageSizeChange(pageSize) {
+    handlePageSizeChange(page, pageSize) {
       this.pagination.pageSize = pageSize;
     },
   },

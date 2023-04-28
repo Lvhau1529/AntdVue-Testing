@@ -6,12 +6,13 @@
     {{ folderSelected }}
     {{ selectedRowKeys }} -->
     <h2 style="font-weight: bold; font-size: 20px">Danh sách chứng từ</h2>
-    <p v-if="folderSelected || search">
-      Bạn vui lòng chọn danh sách chứng từ Bạn có thể chọn danh sách những chứng
-      từ nhập liệu ERP hoặc chọn danh sách những chứng từ cần kiểm tra tính hợp
-      lệ
+    <p v-if="!folderSelected && !search">
+      Bạn vui lòng chọn danh sách chứng từ
     </p>
-    <p v-else>Bạn vui lòng chọn danh sách chứng từ</p>
+    <p v-else>
+      Bạn có thể chọn danh sách những chứng từ nhập liệu ERP hoặc chọn danh sách
+      những chứng từ cần kiểm tra tính hợp lệ
+    </p>
     <div class="box-header">
       <div class="box-header__left">
         <div>
