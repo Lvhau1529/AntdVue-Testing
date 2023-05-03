@@ -184,9 +184,7 @@ export default {
     // this.data = data;
   },
   computed: {
-    ...mapState({
-      selectedRowKeys: (state) => state.selectedRowKeys,
-    }),
+    ...mapState("table", ["selectedRowKeys"]),
     rowSelection() {
       return {
         selectedRowKeys: this.selectedRowKeys,
@@ -197,7 +195,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["setSelectedRowKeys"]),
+    ...mapActions("table", ["setSelectedRowKeys"]),
     totalPayment(totalNoTax, totalTax) {
       const cal =
         parseFloat(Math.round(totalNoTax)) + parseFloat(Math.round(totalTax));

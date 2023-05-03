@@ -19,11 +19,13 @@
     </div>
     <PopupNotifcation ref="PopupNotifcation" @ok="handleOk" />
     <PopupUpload ref="PopupUpload" />
+    aaa {{ selectedRowKeys }}
   </div>
 </template>
 <script>
 import PopupNotifcation from "@/components/Popup/PopupNotifcation.vue";
 import PopupUpload from "@/components/Popup/PopupUpload.vue";
+import { mapState } from "vuex";
 export default {
   name: "AboutView",
   components: {
@@ -32,6 +34,13 @@ export default {
   },
   data() {
     return {};
+  },
+  mounted() {
+    console.log(this.selectedRowKeys);
+    console.log(this.$store.state);
+  },
+  computed: {
+    ...mapState("table", ["selectedRowKeys"]),
   },
   methods: {
     handleOk() {

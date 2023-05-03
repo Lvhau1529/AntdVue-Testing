@@ -19,6 +19,7 @@
       <div class="modal__content">
         <a-list
           v-if="fileList.length > 0"
+          :class="{ 'custom__alist--error': errorMessage }"
           item-layout="horizontal"
           :data-source="fileList"
           :bordered="true"
@@ -59,9 +60,11 @@
             <a-icon type="cloud-upload" />
           </p>
           <p class="ant-upload-text">Upload file</p>
-          <p v-if="errorMessage" class="upload-error">
-            File của bạn không hợp lệ, vui lòng upload đúng định dạng excel
-          </p>
+          <transition name="fade">
+            <p v-if="errorMessage" class="upload-error">
+              File của bạn không hợp lệ, vui lòng upload đúng định dạng excel
+            </p>
+          </transition>
         </a-upload-dragger>
       </div>
       <template slot="footer">
@@ -98,10 +101,10 @@ export default {
   },
   methods: {
     handleClearUpload() {
+      this.errorMessage = false;
       this.fileList = [];
     },
     beforeUpload(file, fileList) {
-      this.errorMessage = true;
       const fileType = file.type;
       const validTypes = [
         "application/vnd.ms-excel",
@@ -109,14 +112,14 @@ export default {
       ];
       const isValidType = validTypes.includes(fileType);
       if (!isValidType) {
-        this.$notification["error"]({
-          message: "Sai định dạng file",
-          description: "Bạn chỉ có thể upload file Excel",
-          onClick: () => {
-            console.log("Notification Clicked!");
-          },
-          duration: 1.5,
-        });
+        this.errorMessage = true;
+        // this.$notification["error"]({
+        //   message: "Sai định dạng file",
+        //   description: "Bạn chỉ có thể upload file Excel",
+        //   onClick: () => {
+        //     console.log("Notification Clicked!");
+        //   },
+        // });
       }
       this.fileList = fileList;
       return isValidType;
@@ -207,12 +210,23 @@ export default {
     }
   }
 }
-.custom-list-item {
-  align-items: center;
-  justify-content: space-between;
+.custom__alist--error {
+  border-color: #fb0808;
+  .custom-list-item {
+    align-items: center;
+    justify-content: space-between;
+  }
 }
 .upload-error {
   font-weight: normal;
   color: #fb0808;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

@@ -6,6 +6,10 @@
     {{ folderSelected }}
     {{ selectedRowKeys }} -->
     <h2 style="font-weight: bold; font-size: 20px">Danh sách chứng từ</h2>
+    <BreadcrumbField
+      :breadcrumb-data="treeData"
+      :selected-value="folderSelected"
+    />
     <p v-if="!folderSelected && !search">
       Bạn vui lòng chọn danh sách chứng từ
     </p>
@@ -102,6 +106,7 @@
 import { mapState, mapActions } from "vuex";
 import PopupCustom from "@/components/PopupCustom.vue";
 import TableField from "@/components/TableField.vue";
+import BreadcrumbField from "@/components/BreadcrumbField.vue";
 import ECM from "@/services/ecm/index";
 
 export default {
@@ -109,6 +114,7 @@ export default {
   components: {
     PopupCustom,
     // SelectField,
+    BreadcrumbField,
     TableField,
   },
   data() {
@@ -152,26 +158,26 @@ export default {
       },
     },
   },
-  mounted() {
+  created() {
     this.init();
   },
   computed: {
-    ...mapState({
-      selectedRowKeys: (state) => state.selectedRowKeys,
-    }),
+    ...mapState("table", ["selectedRowKeys"]),
     hasSelected() {
       return this.selectedRowKeys.length > 0;
     },
   },
   methods: {
-    ...mapActions(["setSelectedRowKeys"]),
+    ...mapActions("table", ["setSelectedRowKeys"]),
     async init() {
       const payload = {
         ecm_path: "",
       };
+      // const listFolder = this.handleListFolder(list_folder.result);
+      // this.treeData = [this.transformData(listFolder[0].children)];
       await ECM.ListFile(payload)
         .then((res) => {
-          const listFolder = this.handleListFolder(res.data.result);
+          const listFolder = this.handleListFolder(res.result);
           this.treeData = [this.transformData(listFolder[0].children)];
         })
         .catch((err) => {
@@ -189,7 +195,7 @@ export default {
         })
         .catch((err) => {
           this.$message.error(
-            err.response.data.message || "Có lỗi xảy ra, vui lòng thử lại sau"
+            err?.response?.data.message || "Có lỗi xảy ra, vui lòng thử lại sau"
           );
           this.loadingExport = false;
         });
