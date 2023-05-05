@@ -34,9 +34,6 @@
             />
             <div>
               <p>Hệ thống ERP có 0 hoá đơn sai lệch hệ thống ECM</p>
-              <p class="error_detail" @click="handleToPage">
-                (Xem chi tiết tại đây)
-              </p>
             </div>
           </div>
         </div>

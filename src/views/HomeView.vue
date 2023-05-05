@@ -1,18 +1,16 @@
 <template>
   <div class="wrapper">
-    <!-- {{ result }}
+    {{ result }}
     {{ value }}
     {{ selected }}
     {{ folderSelected }}
-    {{ selectedRowKeys }} -->
+    {{ selectedRowKeys }}
     <h2 style="font-weight: bold; font-size: 20px">Danh sách chứng từ</h2>
     <BreadcrumbField
       :breadcrumb-data="treeData"
-      :selected-value="folderSelected"
+      :selected-value="selectFolder"
     />
-    <p v-if="!folderSelected && !search">
-      Bạn vui lòng chọn danh sách chứng từ
-    </p>
+    <p v-if="!selectFolder && !search">Bạn vui lòng chọn danh sách chứng từ</p>
     <p v-else>
       Bạn có thể chọn danh sách những chứng từ nhập liệu ERP hoặc chọn danh sách
       những chứng từ cần kiểm tra tính hợp lệ
@@ -28,7 +26,7 @@
             placeholder="Thư mục"
             defaultValue=""
             tree-default-expand-all
-            v-model="folderSelected"
+            v-model="selectFolder"
           >
           </a-tree-select>
         </div>
@@ -52,7 +50,7 @@
           @search="onSearch"
         />
       </div>
-      <div v-if="folderSelected || search" class="box-header__right">
+      <div v-if="selectFolder || search" class="box-header__right">
         <div>
           <a-button
             :disabled="!hasSelected"
@@ -84,9 +82,9 @@
       </div>
     </div>
     <TableField
-      v-show="folderSelected || search"
+      v-show="selectFolder || search"
       ref="TableField"
-      :folderSelected="folderSelected"
+      :folderSelected="selectFolder"
       @checkVaildSuccess="handleCheckValidSuccess"
     />
     <PopupCustom
@@ -102,7 +100,6 @@
 
 <script>
 // import list_folder from "@/data/list_folder.json";
-// import SelectField from "@/components/SelectField.vue";
 import { mapState, mapActions } from "vuex";
 import PopupCustom from "@/components/PopupCustom.vue";
 import TableField from "@/components/TableField.vue";
@@ -113,7 +110,6 @@ export default {
   name: "HomeView",
   components: {
     PopupCustom,
-    // SelectField,
     BreadcrumbField,
     TableField,
   },
@@ -121,7 +117,6 @@ export default {
     return {
       data: [],
       selected: null,
-      folderSelected: "",
       loading: false,
       loadingExport: false,
       modal: {},
@@ -148,7 +143,6 @@ export default {
           label: "Không hợp lệ",
         },
       ],
-      treeData: [],
     };
   },
   watch: {
@@ -162,18 +156,35 @@ export default {
     this.init();
   },
   computed: {
-    ...mapState("table", ["selectedRowKeys"]),
+    ...mapState({
+      selectedRowKeys: (state) => state.table.selectedRowKeys,
+      folderSelected: (state) => state.global.folderSelected,
+      treeData: (state) => state.global.treeData,
+    }),
     hasSelected() {
       return this.selectedRowKeys.length > 0;
     },
+    selectFolder: {
+      get() {
+        return this.folderSelected;
+      },
+      set(value) {
+        this.setFolderSelected(value);
+      },
+    },
   },
   methods: {
-    ...mapActions("table", ["setSelectedRowKeys"]),
+    ...mapActions({
+      setSelectedRowKeys: "table/setSelectedRowKeys",
+      setFolderSelected: "global/setFolderSelected",
+      setTreeData: "global/setTreeData",
+    }),
     async init() {
       const payload = {
         ecm_path: "",
       };
       // const listFolder = this.handleListFolder(list_folder.result);
+      // this.setTreeData([this.transformData(listFolder[0].children)]);
       // this.treeData = [this.transformData(listFolder[0].children)];
       await ECM.ListFile(payload)
         .then((res) => {
@@ -181,7 +192,7 @@ export default {
           this.treeData = [this.transformData(listFolder[0].children)];
         })
         .catch((err) => {
-          this.$message.error(err.data.message);
+          err?.response?.data.message || "Có lỗi xảy ra, vui lòng thử lại sau";
         });
     },
     async handleExport() {

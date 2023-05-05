@@ -1,11 +1,15 @@
 import Vue from "vue";
-// import store from "src/store";
-// import constants from "src/constants";
+import VueCookies from "vue-cookies";
+
+Vue.use(VueCookies);
 
 const KEY_ACCESS_TOKEN = "access_token";
 
 export function getToken() {
-  return JSON.parse(localStorage.getItem(KEY_ACCESS_TOKEN));
+  return (
+    Vue.$cookies.get("MbfEcmAccessToken") ||
+    JSON.parse(localStorage.getItem(KEY_ACCESS_TOKEN))
+  );
 }
 
 export function setToken(data) {

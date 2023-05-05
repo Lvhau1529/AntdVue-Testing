@@ -7,8 +7,8 @@ class ECM {
   ListInvoice(payload) {
     return http.post("folder/list-processed-invoice-row", payload);
   }
-  AddTask(payload) {
-    return http.post("createTask", payload);
+  UploadFile(payload) {
+    return http.upload("file/upload", payload);
   }
   CheckValidInvoice(payload) {
     return http.post("xml/check-valid-invoice-by-id", payload);

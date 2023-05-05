@@ -1,7 +1,7 @@
 import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
-import { getToken } from "@/helper/auth";
+import { getToken } from "@/helper/auth.js";
 
 /**
  * Service to call HTTP request via Axios
@@ -9,7 +9,7 @@ import { getToken } from "@/helper/auth";
 const http = {
   init() {
     Vue.use(VueAxios, axios);
-    Vue.axios.defaults.baseURL = process.env.VUE_APP_API_URL;
+    Vue.axios.defaults.baseURL = "http://10.1.204.16:8003/ecm/v1/";
   },
 
   /**
@@ -18,15 +18,16 @@ const http = {
   setHeader() {
     this.init();
     if (getToken()) {
-      Vue.axios.defaults.headers["Authorization"] = `Bearer ${getToken()}`;
+      Vue.axios.defaults.headers.Authorization = `Bearer ${getToken()}`;
     }
   },
 
   /**
    * Send the GET HTTP request
+   *
    * @param resource
    * @param config
-   * @returns {*}
+   * @return {*}
    */
   get(resource, config) {
     this.setHeader();
@@ -35,26 +36,24 @@ const http = {
 
   /**
    * Set the POST HTTP request
+   *
    * @param resource
    * @param params
    * @param config
-   * @returns {*}
+   * @return {*}
    */
   post(resource, params) {
     this.setHeader();
-    return Vue.axios.post(`${resource}`, params, {
-      headers: {
-        "content-type": "application/json",
-      },
-    });
+    return Vue.axios.post(`${resource}`, params);
   },
 
   /**
    * Send the PUT HTTP request
+   *
    * @param resource
    * @param params
    * @param config
-   * @returns {IDBRequest<IDBValidKey> | Promise<void>}
+   * @return {IDBRequest<IDBValidKey> | Promise<void>}
    */
   put(resource, params, config) {
     this.setHeader();
@@ -63,9 +62,10 @@ const http = {
 
   /**
    * Send the DELETE HTTP request
+   *
    * @param resource
    * @param config
-   * @returns {*}
+   * @return {*}
    */
   delete(resource, config) {
     this.setHeader();
@@ -74,9 +74,10 @@ const http = {
 
   /**
    * Set the UPLOAD HTTP request
+   *
    * @param resource
    * @param params
-   * @returns {*}
+   * @return {*}
    */
   upload(resource, params) {
     this.setHeader();

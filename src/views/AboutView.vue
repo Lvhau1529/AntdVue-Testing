@@ -17,27 +17,22 @@
         </div>
       </div>
     </div>
-    <PopupNotifcation ref="PopupNotifcation" @ok="handleOk" />
+    <PopupFolder ref="PopupFolder" @ok="handleOk" />
     <PopupUpload ref="PopupUpload" />
-    aaa {{ selectedRowKeys }}
   </div>
 </template>
 <script>
-import PopupNotifcation from "@/components/Popup/PopupNotifcation.vue";
+import PopupFolder from "@/components/Popup/PopupFolder.vue";
 import PopupUpload from "@/components/Popup/PopupUpload.vue";
 import { mapState } from "vuex";
 export default {
   name: "AboutView",
   components: {
-    PopupNotifcation,
     PopupUpload,
+    PopupFolder,
   },
   data() {
     return {};
-  },
-  mounted() {
-    console.log(this.selectedRowKeys);
-    console.log(this.$store.state);
   },
   computed: {
     ...mapState("table", ["selectedRowKeys"]),
@@ -48,7 +43,7 @@ export default {
     },
     handleOpenPopup() {
       this.$nextTick(() => {
-        this.$refs.PopupNotifcation.showModal();
+        this.$refs.PopupFolder.showModal();
       });
     },
     handleSyncERP() {

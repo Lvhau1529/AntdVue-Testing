@@ -1,7 +1,6 @@
 import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
-// import { getToken, removeToken } from 'src/helper/auth';
 
 /**
  * Service to call HTTP request via Axios
@@ -9,7 +8,7 @@ import VueAxios from "vue-axios";
 const httpNoAuth = {
   init() {
     Vue.use(VueAxios, axios);
-    Vue.axios.defaults.baseURL = process.env.VUE_APP_API_URL;
+    Vue.axios.defaults.baseURL = "http://10.1.204.16:8003/ecm/v1/";
   },
 
   /**

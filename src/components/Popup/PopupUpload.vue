@@ -17,11 +17,15 @@
         </div>
       </template>
       <div class="modal__content">
+        <BreadcrumbField
+          :breadcrumb-data="treeData"
+          :selected-value="selectFolder"
+        />
         <a-list
-          v-if="fileList.length > 0"
+          v-if="fileUpload"
           :class="{ 'custom__alist--error': errorMessage }"
           item-layout="horizontal"
-          :data-source="fileList"
+          :data-source="fileUpload"
           :bordered="true"
         >
           <a-list-item
@@ -30,13 +34,25 @@
             slot-scope="item"
           >
             <div>
-              <a-icon
-                style="margin-right: 10px; font-size: 20px"
-                type="file-excel"
-                theme="twoTone"
-                two-tone-color="#52c41a"
-              />
-              <span>{{ item.name }}</span>
+              <template v-if="errorMessage">
+                <a-icon
+                  style="margin-right: 10px; font-size: 20px"
+                  type="file-exclamation"
+                  theme="twoTone"
+                />
+                <span :class="{ 'upload-error': errorMessage }">{{
+                  item.name
+                }}</span>
+              </template>
+              <template v-else>
+                <a-icon
+                  style="margin-right: 10px; font-size: 20px"
+                  type="file-excel"
+                  theme="twoTone"
+                  two-tone-color="#52c41a"
+                />
+                <span>{{ item.name }}</span>
+              </template>
             </div>
             <div style="cursor: pointer">
               <a-icon
@@ -52,24 +68,24 @@
           name="file"
           :multiple="false"
           :before-upload="beforeUpload"
-          :on-success="onSuccess"
-          :on-error="onError"
           :showUploadList="false"
         >
           <p class="ant-upload-drag-icon">
             <a-icon type="cloud-upload" />
           </p>
           <p class="ant-upload-text">Upload file</p>
-          <transition name="fade">
-            <p v-if="errorMessage" class="upload-error">
-              File của bạn không hợp lệ, vui lòng upload đúng định dạng excel
-            </p>
-          </transition>
+          <p v-if="errorMessage" class="upload-error">
+            File của bạn không hợp lệ, vui lòng upload đúng định dạng excel
+          </p>
         </a-upload-dragger>
       </div>
       <template slot="footer">
         <div class="modal__footer">
-          <a-button @click="handleOk" type="primary" :loading="loading"
+          <a-button
+            :disabled="!fileUpload || !isValidType"
+            @click="handleOk"
+            type="primary"
+            :loading="loading"
             >Xác nhận</a-button
           >
           <a-button @click="handleCancel">Huỷ</a-button>
@@ -80,8 +96,14 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import ECM from "@/services/ecm/index";
+import BreadcrumbField from "@/components/BreadcrumbField.vue";
 export default {
   name: "PopupUpload",
+  components: {
+    BreadcrumbField,
+  },
   props: {
     data: {
       type: Array,
@@ -90,59 +112,84 @@ export default {
   },
   data() {
     return {
-      fileList: [],
+      fileUpload: null,
+      isValidType: false,
       visible: false,
       loading: false,
       errorMessage: false,
     };
   },
-  mounted() {
-    console.log("aaaaa");
+  computed: {
+    ...mapState({
+      folderSelected: (state) => state.global.folderSelected,
+      treeData: (state) => state.global.treeData,
+    }),
+    selectFolder: {
+      get() {
+        return this.folderSelected;
+      },
+      set(value) {
+        this.setFolderSelected(value);
+      },
+    },
   },
   methods: {
     handleClearUpload() {
       this.errorMessage = false;
-      this.fileList = [];
+      this.fileUpload = null;
+      this.isValidType = false;
     },
-    beforeUpload(file, fileList) {
+    beforeUpload(file, fileUpload) {
+      this.handleClearUpload();
       const fileType = file.type;
       const validTypes = [
         "application/vnd.ms-excel",
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       ];
-      const isValidType = validTypes.includes(fileType);
-      if (!isValidType) {
+      this.isValidType = validTypes.includes(fileType);
+      if (!this.isValidType) {
         this.errorMessage = true;
-        // this.$notification["error"]({
-        //   message: "Sai định dạng file",
-        //   description: "Bạn chỉ có thể upload file Excel",
-        //   onClick: () => {
-        //     console.log("Notification Clicked!");
-        //   },
-        // });
       }
-      this.fileList = fileList;
-      return isValidType;
+      this.fileUpload = fileUpload;
+      return false;
     },
-    // onSuccess(response, file) {
-    //   // Handle the successful upload
-    // },
-    // onError(error, response, file) {
-    //   // Handle the upload error
-    // },
     showModal() {
       this.visible = true;
     },
     handleOk() {
       this.loading = true;
+      const payload = {
+        file_upload: this.fileUpload[0],
+        ecm_path: this.selectFolder,
+        overwrite: 0,
+      };
+      ECM.UploadFile(payload)
+        .then((res) => {
+          console.log(res);
+          if (res?.data?.details[0].code === "6") {
+            this.$message.warning(res?.data?.details[0].message);
+          } else {
+            this.$message.success(
+              res?.data?.details[0].message || "Upload file thành công"
+            );
+          }
+          this.handleClearUpload();
+          this.loading = false;
+        })
+        .catch((err) => {
+          err?.response?.data.message || "Có lỗi xảy ra, vui lòng thử lại sau";
+          this.handleClearUpload();
+          this.loading = false;
+        });
       this.$emit("ok");
     },
     handleCancel() {
+      this.loading = false;
       this.destroyAll();
     },
     destroyAll() {
-      console.log("asfjasjf");
       this.visible = false;
+      this.handleClearUpload();
       this.$destroyAll();
     },
   },
@@ -154,6 +201,9 @@ export default {
 }
 .ant-upload-drag-icon {
   margin-bottom: 5px !important;
+}
+.ant-modal-body {
+  padding: 10px 24px 24px 24px;
 }
 </style>
 
@@ -220,13 +270,5 @@ export default {
 .upload-error {
   font-weight: normal;
   color: #fb0808;
-}
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
 }
 </style>

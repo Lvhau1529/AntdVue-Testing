@@ -1,14 +1,21 @@
+import Vue from "vue";
+import VueCookies from "vue-cookies";
+
 const TOKEN_KEY = "access_token";
 const TOKEN_EXPIRED_AT_KEY = "token_expired_at";
 const REFRESH_TOKEN_KEY = "refresh_token";
 const REFRESH_TOKEN_EXPIRED_AT_KEY = "refresh_token_expired_at";
 const LANGUAGE_KEY = "lang";
 
+Vue.use(VueCookies);
+
 const BUFFER_TIME = 60 * 1000; // 60s
 
 const TokenService = {
   getToken() {
-    return localStorage.getItem(TOKEN_KEY);
+    return (
+      localStorage.getItem(TOKEN_KEY) || Vue.$cookies.get("MbfEcmAccessToken")
+    );
   },
 
   setToken(accessToken) {

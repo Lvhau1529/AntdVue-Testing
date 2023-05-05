@@ -8,6 +8,7 @@
       :columns="columns"
       :data-source="data"
       :pagination="false"
+      :scroll="{ x: true }"
     >
       <a-table-column
         title="Column Title"
@@ -71,7 +72,7 @@
 </template>
 
 <script>
-// import data from "@/data/mock_data.json";
+import list_process_invoice from "@/data/list_process_invoice";
 import { mapState, mapActions } from "vuex";
 import ECM from "@/services/ecm";
 import ItemInvoice from "./ItemInvoice.vue";
@@ -98,10 +99,12 @@ export default {
           width: "60px",
           key: "stt",
           scopedSlots: { customRender: "stt" },
+          fixed: "left",
         },
         {
           title: "Tên file hoá đơn",
           dataIndex: "invoice_file_name",
+          fixed: "left",
         },
         {
           title: "Người upload",
@@ -109,7 +112,7 @@ export default {
         },
         {
           title: "Mẫu số hoá đơn",
-          dataIndex: "mau_hoa_don",
+          dataIndex: "mau_so_hoa_don",
         },
         { title: "Ký hiệu hoá đơn", dataIndex: "ky_hieu_hoa_don" },
         {
@@ -124,6 +127,7 @@ export default {
         {
           title: "Tên người bán",
           dataIndex: "ten_nguoi_ban",
+          width: "300px",
         },
         { title: "Mã số thuế người bán", dataIndex: "mst_nguoi_ban" },
         {
@@ -145,11 +149,11 @@ export default {
           dataIndex: "tong_gt_thanh_toan",
           scopedSlots: { customRender: "tong_gt_thanh_toan" },
         },
-        // {
-        //   title: "Trạng thái tích hợp ERP",
-        //   dataIndex: "trang_thai_ERP",
-        //   scopedSlots: { customRender: "trang_thai_ERP" },
-        // },
+        {
+          title: "Trạng thái tích hợp ERP",
+          dataIndex: "trang_thai_ERP",
+          scopedSlots: { customRender: "trang_thai_ERP" },
+        },
         {
           title: "Trạng thái kiểm tra hợp đồng",
           dataIndex: "trang_thai_HD",
@@ -209,6 +213,18 @@ export default {
         page_size: this.pagination.pageSize,
         filter: this.pagination.filter,
       };
+      this.data = list_process_invoice.details;
+      // add col tong_gt_thanh_toan
+      this.data.map((item) => {
+        item.tong_gt_thanh_toan = this.totalPayment(
+          item.tong_tien_khong_thue,
+          item.tong_tien_thue
+        );
+        // item.trang_thai_ERP = "Chưa tích hợp";
+        item.trang_thai_HD = item.file_id;
+      });
+      this.total = list_process_invoice?.num_total_files;
+      this.loading = false;
       await ECM.ListInvoice(payload)
         .then((res) => {
           this.data = res?.data.details;
@@ -223,7 +239,6 @@ export default {
           });
           this.total = res?.data?.num_total_files;
           this.loading = false;
-          // this.data = res.data;
         })
         .catch((err) => {
           this.$message.error(err.response.data.message);
@@ -243,4 +258,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+.ant-table th {
+  white-space: nowrap;
+}
+</style>
