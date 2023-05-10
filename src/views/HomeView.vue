@@ -111,7 +111,7 @@
       :has-cancel="modal.hasCancel"
       @ok="handleOk"
     />
-    <PopupFolder ref="PopupFolder" :rawList="rawList" />
+    <PopupFolder v-if="rawList" ref="PopupFolder" :rawList="rawList" />
     <PopupUpload ref="PopupUpload" />
   </div>
 </template>
@@ -212,8 +212,12 @@ export default {
       await ECM.ListFile(payload)
         .then((res) => {
           this.rawList = res;
+          console.log(res);
           const listFolder = this.handleListFolder(res.result);
-          this.treeData = [this.transformData(listFolder[0].children)];
+          console.log(listFolder);
+          // this.treeData = [this.transformData(listFolder[0].children)];
+          this.setTreeData([this.transformData(listFolder[0].children)]);
+          console.log(this.treeData);
         })
         .catch((err) => {
           err?.response?.data.message || "Có lỗi xảy ra, vui lòng thử lại sau";
@@ -225,7 +229,7 @@ export default {
         ecm_path: this.folderSelected,
       })
         .then((res) => {
-          window.open(res.data, "_blank");
+          window.open(res, "_blank");
           this.loadingExport = false;
         })
         .catch((err) => {

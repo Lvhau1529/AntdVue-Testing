@@ -226,7 +226,7 @@ export default {
       this.loading = false;
       await ECM.ListInvoice(payload)
         .then((res) => {
-          this.data = res?.data.details;
+          this.data = res?.details;
           // add col tong_gt_thanh_toan
           this.data.map((item) => {
             item.tong_gt_thanh_toan = this.totalPayment(
@@ -240,7 +240,8 @@ export default {
           this.loading = false;
         })
         .catch((err) => {
-          this.$message.error(err.response.data.message);
+          console.log("err", err);
+          this.$message.error(err.data.message);
         });
     },
     handleCheckValidSuccess() {

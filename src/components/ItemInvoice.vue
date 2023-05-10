@@ -61,11 +61,12 @@ export default {
       const payload = { ecm_file_id: id_file };
       ECM.CheckValidInvoice(payload)
         .then(async (res) => {
-          this.invoiceStatus = (await res?.data?.details[0].invoice_checked
+          this.invoiceStatus = (await res?.details[0].invoice_checked
             .is_modified_invoice.result)
             ? "Không hợp lệ"
             : "Hợp lệ";
           if (
+            this.getSelectedRowKeys.length > 0 &&
             this.getSelectedRowKeys[this.getSelectedRowKeys.length - 1]
               .file_id === this.fileId &&
             checkStatus
@@ -75,7 +76,8 @@ export default {
           }
         })
         .catch((err) => {
-          this.$message.error(err.response.data.message);
+          console.log(err);
+          this.$message.error(err.data.message);
           this.invoiceStatus = "Không";
         });
       this.loading = false;

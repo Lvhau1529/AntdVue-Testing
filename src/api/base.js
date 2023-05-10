@@ -44,7 +44,14 @@ const http = {
    */
   post(resource, params) {
     this.setHeader();
-    return Vue.axios.post(`${resource}`, params);
+    return Vue.axios
+      .post(`${resource}`, params)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        return error.response;
+      });
   },
 
   /**
