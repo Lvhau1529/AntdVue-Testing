@@ -3,7 +3,7 @@
     <a-table
       ref="aTable"
       :loading="loading"
-      :row-key="(record) => record.file_id"
+      :row-key="(record) => JSON.stringify(record)"
       :row-selection="rowSelection"
       :columns="columns"
       :data-source="data"
@@ -48,7 +48,6 @@
         <ItemInvoice
           ref="ItemInvoice"
           :fileId="file_id"
-          :selectedRowKeys="selectedRowKeys"
           :reload="reloadCheck"
           @checkVaildSuccess="handleCheckValidSuccess"
         />

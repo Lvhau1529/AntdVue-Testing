@@ -1,10 +1,10 @@
 <template>
   <div class="wrapper">
-    {{ result }}
+    <!-- {{ result }}
     {{ value }}
     {{ selected }}
     {{ folderSelected }}
-    {{ selectedRowKeys }}
+    {{ selectedRowKeys }} -->
     <h2 style="font-weight: bold; font-size: 20px">Danh sách chứng từ</h2>
     <BreadcrumbField
       :breadcrumb-data="treeData"
@@ -53,6 +53,22 @@
       <div v-if="selectFolder || search" class="box-header__right">
         <div>
           <a-button
+            :disabled="
+              !(selectedRowKeys.length > 0 && selectedRowKeys.length <= 1)
+            "
+            type="primary"
+            @click="handleOpenPopup('MoveAndCopy')"
+          >
+            Di chuyển/ Sao chép
+          </a-button>
+        </div>
+        <div>
+          <a-button type="primary" @click="handleOpenPopup('CheckInvoiceERP')">
+            Check bảng kê ERP
+          </a-button>
+        </div>
+        <div>
+          <a-button
             :disabled="!hasSelected"
             type="primary"
             :loading="loading"
@@ -61,7 +77,7 @@
             Kiểm tra tính hợp lệ
           </a-button>
         </div>
-        <div>
+        <!-- <div>
           <a-button
             disabled
             type="primary"
@@ -69,7 +85,7 @@
           >
             Tích hợp ERP
           </a-button>
-        </div>
+        </div> -->
         <div>
           <a-button
             :loading="loadingExport"
@@ -95,6 +111,8 @@
       :has-cancel="modal.hasCancel"
       @ok="handleOk"
     />
+    <PopupFolder ref="PopupFolder" />
+    <PopupUpload ref="PopupUpload" />
   </div>
 </template>
 
@@ -102,6 +120,8 @@
 // import list_folder from "@/data/list_folder.json";
 import { mapState, mapActions } from "vuex";
 import PopupCustom from "@/components/PopupCustom.vue";
+import PopupFolder from "@/components/Popup/PopupFolder.vue";
+import PopupUpload from "@/components/Popup/PopupUpload.vue";
 import TableField from "@/components/TableField.vue";
 import BreadcrumbField from "@/components/BreadcrumbField.vue";
 import ECM from "@/services/ecm/index";
@@ -109,9 +129,11 @@ import ECM from "@/services/ecm/index";
 export default {
   name: "HomeView",
   components: {
-    PopupCustom,
     BreadcrumbField,
     TableField,
+    PopupCustom,
+    PopupFolder,
+    PopupUpload,
   },
   data() {
     return {
@@ -180,12 +202,12 @@ export default {
       setTreeData: "global/setTreeData",
     }),
     async init() {
-      const payload = {
-        ecm_path: "",
-      };
       // const listFolder = this.handleListFolder(list_folder.result);
       // this.setTreeData([this.transformData(listFolder[0].children)]);
       // this.treeData = [this.transformData(listFolder[0].children)];
+      const payload = {
+        ecm_path: "",
+      };
       await ECM.ListFile(payload)
         .then((res) => {
           const listFolder = this.handleListFolder(res.result);
@@ -266,6 +288,16 @@ export default {
     },
     handleOpenPopup(type) {
       switch (type) {
+        case "MoveAndCopy":
+          this.$nextTick(() => {
+            this.$refs.PopupFolder.showModal();
+          });
+          break;
+        case "CheckInvoiceERP":
+          this.$nextTick(() => {
+            this.$refs.PopupUpload.showModal();
+          });
+          break;
         case "CheckVerify":
           this.modal = {
             content:
@@ -273,6 +305,9 @@ export default {
                 ? "Bạn có chắc chắn muốn kiểm tra tính hợp lệ của các hoá đơn này không?"
                 : "Bạn có chắc chắn muốn kiểm tra tính hợp lệ của hoá đơn này không?",
           };
+          this.$nextTick(() => {
+            this.$refs.PopupCustom.showModal();
+          });
           break;
         case "IntergationERP":
           this.modal = {
@@ -285,9 +320,6 @@ export default {
         default:
           break;
       }
-      this.$nextTick(() => {
-        this.$refs.PopupCustom.showModal();
-      });
     },
     handleOk() {
       this.$nextTick(() => {

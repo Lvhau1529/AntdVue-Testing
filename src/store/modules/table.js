@@ -3,7 +3,16 @@ const state = {
 };
 
 // getters
-const getters = {};
+const getters = {
+  getSelectedRowKeys(state) {
+    // Replace all escaped commas with regular commas
+    const handleReplace = state.selectedRowKeys.map((str) =>
+      str.replace(/\\,/g, ",")
+    );
+    // Parse the JSON strings into objects
+    return handleReplace.map((str) => JSON.parse(str));
+  },
+};
 
 // mutations
 const mutations = {

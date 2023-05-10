@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import ECM from "@/services/ecm";
 export default {
   name: "ItemInvoice",
@@ -14,10 +15,6 @@ export default {
     fileId: {
       type: Number,
       default: 0,
-    },
-    selectedRowKeys: {
-      type: Array,
-      default: () => [],
     },
     reload: {
       type: Boolean,
@@ -33,7 +30,7 @@ export default {
   watch: {
     reload: {
       handler() {
-        if (this.selectedRowKeys.includes(this.fileId)) {
+        if (this.getSelectedRowKeys.includes(this.fileId)) {
           this.checkVaildInvoice(this.fileId, "reCheck");
         }
       },
@@ -43,6 +40,7 @@ export default {
     this.checkVaildInvoice(this.fileId);
   },
   computed: {
+    ...mapGetters("table", ["getSelectedRowKeys"]),
     // eslint-disable-next-line vue/return-in-computed-property
     checkColorTag() {
       if (this.invoiceStatus === "Không") {
@@ -68,8 +66,8 @@ export default {
             ? "Không hợp lệ"
             : "Hợp lệ";
           if (
-            this.selectedRowKeys[this.selectedRowKeys.length - 1] ===
-              this.fileId &&
+            this.getSelectedRowKeys[this.getSelectedRowKeys.length - 1]
+              .file_id === this.fileId &&
             checkStatus
           ) {
             this.$emit("checkVaildSuccess");

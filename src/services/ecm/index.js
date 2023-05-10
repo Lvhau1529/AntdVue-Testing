@@ -7,14 +7,17 @@ class ECM {
   ListInvoice(payload) {
     return http.post("folder/list-processed-invoice-row", payload);
   }
-  UploadFile(payload) {
-    return http.upload("file/upload", payload);
-  }
   CheckValidInvoice(payload) {
     return http.post("xml/check-valid-invoice-by-id", payload);
   }
   ExportFile(payload) {
     return http.post("folder/download-invoices", payload);
+  }
+  UploadFile(payload) {
+    return http.upload("file/upload", payload);
+  }
+  MoveFile(payload) {
+    return http.post("file/move", payload);
   }
 }
 

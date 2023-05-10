@@ -8,9 +8,11 @@
         class="breadcrumb"
       >
         <template v-if="item.title === '/'">
-          <a-icon type="home" />
+          <a-icon type="home" @click="handleBreadcrumbClick(item)" />
         </template>
-        <span v-else>{{ item.title }}</span>
+        <span v-else @click="handleBreadcrumbClick(item)">{{
+          item.title
+        }}</span>
       </a-breadcrumb-item>
     </a-breadcrumb>
   </div>
@@ -47,9 +49,11 @@ export default {
     if (this.breadcrumbData && this.selectedValue) {
       this.generateBreadcrumbItems(this.breadcrumbData, this.selectedValue);
     }
-    console.log(this.breadcrumbItems);
   },
   methods: {
+    handleBreadcrumbClick(item) {
+      this.$emit("BreadcrumbItem", item);
+    },
     generateBreadcrumbItems(data, selectedValue) {
       if (Array.isArray(data)) {
         for (let i = 0; i < data.length; i++) {
@@ -83,6 +87,9 @@ export default {
   .breadcrumb {
     display: flex;
     align-items: center;
+  }
+  .breadcrumb-title {
+    cursor: pointer;
   }
 }
 </style>
