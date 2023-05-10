@@ -111,7 +111,7 @@
       :has-cancel="modal.hasCancel"
       @ok="handleOk"
     />
-    <PopupFolder ref="PopupFolder" />
+    <PopupFolder ref="PopupFolder" :listFolder="rawList" />
     <PopupUpload ref="PopupUpload" />
   </div>
 </template>
@@ -165,6 +165,7 @@ export default {
           label: "Không hợp lệ",
         },
       ],
+      rawList: null,
     };
   },
   watch: {
@@ -210,6 +211,7 @@ export default {
       };
       await ECM.ListFile(payload)
         .then((res) => {
+          this.rawList = res;
           const listFolder = this.handleListFolder(res.result);
           this.treeData = [this.transformData(listFolder[0].children)];
         })

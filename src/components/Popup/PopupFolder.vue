@@ -93,7 +93,6 @@
 </template>
 
 <script>
-// import list_folder from "@/data/list_folder.json";
 import { mapState, mapGetters } from "vuex";
 import ECM from "@/services/ecm/index";
 import EmptyField from "@/components/EmptyField.vue";
@@ -104,8 +103,8 @@ export default {
   },
   props: {
     listFolder: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => {},
       required: true,
     },
   },
@@ -150,7 +149,7 @@ export default {
   },
   created() {
     // const listFolder = this.handleListFolder(list_folder.result);
-    const listFolder = this.handleListFolder(this.listFolder.result);
+    const listFolder = this.handleListFolder(this.rawList.result);
     this.data = [this.transformData(listFolder[0].child)];
     this.showData = this.data;
   },
