@@ -111,7 +111,7 @@
       :has-cancel="modal.hasCancel"
       @ok="handleOk"
     />
-    <PopupFolder ref="PopupFolder" :listFolder="rawList" />
+    <PopupFolder ref="PopupFolder" :rawList="rawList" />
     <PopupUpload ref="PopupUpload" />
   </div>
 </template>

@@ -102,7 +102,7 @@ export default {
     EmptyField,
   },
   props: {
-    listFolder: {
+    rawList: {
       type: Object,
       default: () => {},
       required: true,
