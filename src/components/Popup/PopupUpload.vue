@@ -209,7 +209,6 @@ export default {
       } else {
         this.submitErpSync();
       }
-      this.$emit("Cancel");
     },
     async submitFileUpload() {
       this.loading = true;
