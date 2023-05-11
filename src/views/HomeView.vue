@@ -111,8 +111,17 @@
       :has-cancel="modal.hasCancel"
       @ok="handleOk"
     />
-    <PopupFolder v-if="rawList" ref="PopupFolder" :rawList="rawList" />
-    <PopupUpload ref="PopupUpload" />
+    <PopupFolder
+      v-if="!hidePopupFolder"
+      ref="PopupFolder"
+      :rawList="rawList"
+      @Cancel="hidePopupFolder = true"
+    />
+    <PopupUpload
+      v-if="!hidePopupUpload"
+      ref="PopupUpload"
+      @Cancel="hidePopupUpload = true"
+    />
   </div>
 </template>
 
@@ -141,6 +150,8 @@ export default {
       selected: null,
       loading: false,
       loadingExport: false,
+      hidePopupFolder: true,
+      hidePopupUpload: true,
       modal: {},
       result: null,
       value: null,
@@ -295,11 +306,13 @@ export default {
     handleOpenPopup(type) {
       switch (type) {
         case "MoveAndCopy":
+          this.hidePopupFolder = false;
           this.$nextTick(() => {
             this.$refs.PopupFolder.showModal();
           });
           break;
         case "CheckInvoiceERP":
+          this.hidePopupUpload = false;
           this.$nextTick(() => {
             this.$refs.PopupUpload.showModal();
           });

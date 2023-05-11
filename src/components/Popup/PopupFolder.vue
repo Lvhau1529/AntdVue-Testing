@@ -1,13 +1,12 @@
 <template>
   <div v-if="visible" class="wrapper-modal">
     <a-modal
-      v-model="visible"
       centered
       :maskClosable="false"
       :width="540"
-      :destroyOnClose="true"
+      :destroy-on-close="true"
       :visible.sync="visible"
-      @on-visible-change="destroyAll"
+      @cancel="handleCancel"
       class="custom-modal"
     >
       <template slot="title">
@@ -252,11 +251,10 @@ export default {
         ecm_source_path: this.getSelectedRowKeys[0].ecm_path,
         ecm_destination_path: this.selectFolder,
       };
-      console.log("handleOk ~ payload:", payload);
       ECM.MoveFile(payload)
         .then((res) => {
           console.log(res);
-          this.loadingMove = true;
+          this.loadingMove = false;
         })
         .catch((err) => {
           console.log("err", err);
@@ -266,11 +264,8 @@ export default {
       this.visible = true;
     },
     handleCancel() {
-      this.destroyAll();
-    },
-    destroyAll() {
       this.visible = false;
-      this.$destroyAll();
+      this.$emit("Cancel");
     },
   },
 };

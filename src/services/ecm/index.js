@@ -16,6 +16,9 @@ class ECM {
   UploadFile(payload) {
     return http.upload("file/upload", payload);
   }
+  ErpProcess(payload) {
+    return http.upload("erp/erp_process", payload);
+  }
   MoveFile(payload) {
     return http.post("file/move", payload);
   }

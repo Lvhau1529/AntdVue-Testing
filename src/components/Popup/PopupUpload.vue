@@ -1,14 +1,12 @@
 <template>
   <div v-if="visible" class="wrapper-modal">
     <a-modal
-      v-model="visible"
       centered
       :maskClosable="false"
-      :confirm-loading="loading"
       :width="540"
       :destroyOnClose="true"
       :visible.sync="visible"
-      @on-visible-change="destroyAll"
+      @cancel="handleCancel"
       class="custom-modal"
     >
       <template slot="title">
@@ -16,7 +14,7 @@
           <p>Bạn vui lòng chọn file bảng kê ERP để đồng bộ dữ liệu</p>
         </div>
       </template>
-      <div class="modal__content">
+      <div v-if="isFileUpload" class="modal__content">
         <BreadcrumbField
           :breadcrumb-data="treeData"
           :selected-value="selectFolder"
@@ -79,6 +77,48 @@
           </p>
         </a-upload-dragger>
       </div>
+      <div v-else class="modal__content">
+        <div class="success">
+          <div class="detail-notif">
+            <a-icon
+              class="icon"
+              type="check-circle"
+              theme="twoTone"
+              two-tone-color="#52c41a"
+            />
+            <p>Hệ thống ERP có {{ successCount }} hoá đơn trùng khớp ECM</p>
+          </div>
+        </div>
+        <div class="error">
+          <div class="detail-notif">
+            <a-icon
+              class="icon"
+              type="close-circle"
+              theme="twoTone"
+              two-tone-color="#f5222d"
+            />
+            <div>
+              <p>
+                Hệ thống ERP có {{ errorCount }} hoá đơn sai lệch hệ thống ECM
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="warning">
+          <div class="detail-notif">
+            <a-icon
+              class="icon"
+              type="exclamation-circle"
+              theme="twoTone"
+              two-tone-color="#faad14"
+            />
+            <p>
+              Bạn có muốn đồng bộ ngày hạch toán và số tham chiếu của các hoá
+              đơn trùng khớp không?
+            </p>
+          </div>
+        </div>
+      </div>
       <template slot="footer">
         <div class="modal__footer">
           <a-button
@@ -112,11 +152,14 @@ export default {
   },
   data() {
     return {
+      isFileUpload: true,
       fileUpload: null,
       isValidType: false,
       visible: false,
       loading: false,
       errorMessage: false,
+      successCount: 0,
+      errorCount: 0,
     };
   },
   computed: {
@@ -157,40 +200,59 @@ export default {
       this.visible = true;
     },
     handleOk() {
+      if (this.isFileUpload) {
+        this.submitFileUpload();
+      } else {
+        console.log("aaa");
+      }
+      this.$emit("ok");
+    },
+    submitFileUpload() {
       this.loading = true;
       const payload = {
         file_upload: this.fileUpload[0],
         ecm_path: this.selectFolder,
         overwrite: 0,
       };
+      // this.submitErpProcess(payload);
       ECM.UploadFile(payload)
         .then((res) => {
           console.log(res);
-          if (res?.data?.details[0].code === "6") {
-            this.$message.warning(res?.data?.details[0].message);
+          if (res?.details[0].code === "6") {
+            this.$message.warning(res?.details[0].message);
           } else {
             this.$message.success(
-              res?.data?.details[0].message || "Upload file thành công"
+              res?.details[0].message || "Upload file thành công"
             );
+            // After upload file call api show notification
+            this.checkErpProcess(payload);
+            this.handleClearUpload();
           }
+        })
+        .catch((err) => {
+          this.loading = false;
+          err?.data?.message || "Có lỗi xảy ra, vui lòng thử lại sau";
           this.handleClearUpload();
+        });
+    },
+    submitErpProcess(payload) {
+      // this.isFileUpload = false;
+      // this.loading = false;
+      ECM.ErpProcess(payload)
+        .then((res) => {
+          this.isFileUpload = false;
+          this.errorCount = res[1]["So luong hoa don khong trung khop"];
+          this.successCount = res[1]["So luong hoa don trung khop"];
           this.loading = false;
         })
         .catch((err) => {
-          err?.response?.data.message || "Có lỗi xảy ra, vui lòng thử lại sau";
-          this.handleClearUpload();
           this.loading = false;
+          err?.data?.message || "Có lỗi xảy ra, vui lòng thử lại sau";
         });
-      this.$emit("ok");
     },
     handleCancel() {
-      this.loading = false;
-      this.destroyAll();
-    },
-    destroyAll() {
       this.visible = false;
-      this.handleClearUpload();
-      this.$destroyAll();
+      this.$emit("Cancel");
     },
   },
 };

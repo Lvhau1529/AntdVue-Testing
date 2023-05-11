@@ -236,11 +236,10 @@ export default {
             // item.trang_thai_ERP = "Chưa tích hợp";
             item.trang_thai_HD = item.file_id;
           });
-          this.total = res?.data?.num_total_files;
+          this.total = res?.num_total_files;
           this.loading = false;
         })
         .catch((err) => {
-          console.log("err", err);
           this.$message.error(err.data.message);
         });
     },
