@@ -31,7 +31,14 @@ const http = {
    */
   get(resource, config) {
     this.setHeader();
-    return Vue.axios.get(`${resource}`, config);
+    return Vue.axios
+      .get(`${resource}`, config)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        return error.response;
+      });
   },
 
   /**
@@ -88,11 +95,18 @@ const http = {
    */
   upload(resource, params) {
     this.setHeader();
-    return Vue.axios.post(`${resource}`, params, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    return Vue.axios
+      .post(`${resource}`, params, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        return error.response;
+      });
   },
 };
 

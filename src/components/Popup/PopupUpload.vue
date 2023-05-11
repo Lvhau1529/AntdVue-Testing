@@ -217,16 +217,16 @@ export default {
       // this.submitErpProcess(payload);
       ECM.UploadFile(payload)
         .then((res) => {
-          console.log(res);
-          if (res?.details[0].code === "6") {
-            this.$message.warning(res?.details[0].message);
-          } else {
+          if (res?.details[0].code === "0") {
             this.$message.success(
               res?.details[0].message || "Upload file thành công"
             );
             // After upload file call api show notification
             this.checkErpProcess(payload);
             this.handleClearUpload();
+          } else {
+            this.$message.warning(res?.details[0].message);
+            this.loading = false;
           }
         })
         .catch((err) => {
