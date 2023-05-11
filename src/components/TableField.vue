@@ -240,7 +240,9 @@ export default {
           this.loading = false;
         })
         .catch((err) => {
-          this.$message.error(err.data.message);
+          this.$message.error(
+            err?.data.message || "Có lỗi xảy ra, vui lòng thử lại sau"
+          );
         });
     },
     handleCheckValidSuccess() {

@@ -11,7 +11,10 @@
     >
       <template slot="title">
         <div class="modal__header">
-          <p>Bạn vui lòng chọn file bảng kê ERP để đồng bộ dữ liệu</p>
+          <p v-if="!isFileUpload">
+            Bạn vui lòng chọn file bảng kê ERP để đồng bộ dữ liệu
+          </p>
+          <p v-else>Thông báo</p>
         </div>
       </template>
       <div v-if="isFileUpload" class="modal__content">
@@ -230,7 +233,9 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
-          err?.data?.message || "Có lỗi xảy ra, vui lòng thử lại sau";
+          this.$message.error(
+            err?.data.message || "Có lỗi xảy ra, vui lòng thử lại sau"
+          );
           this.handleClearUpload();
         });
     },
@@ -246,7 +251,9 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
-          err?.data?.message || "Có lỗi xảy ra, vui lòng thử lại sau";
+          this.$message.error(
+            err?.data.message || "Có lỗi xảy ra, vui lòng thử lại sau"
+          );
         });
     },
     handleCancel() {

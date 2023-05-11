@@ -76,8 +76,9 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(err);
-          this.$message.error(err.data.message);
+          this.$message.error(
+            err?.data.message || "Có lỗi xảy ra, vui lòng thử lại sau"
+          );
           this.invoiceStatus = "Không";
         });
       this.loading = false;

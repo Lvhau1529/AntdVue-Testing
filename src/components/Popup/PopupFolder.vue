@@ -76,7 +76,10 @@
       </div>
       <template slot="footer">
         <div class="modal__footer">
-          <a-button @click="handleCopyFile" :loading="loadingCopy"
+          <a-button
+            @click="handleCopyFile"
+            :loading="loadingCopy"
+            :disabled="true"
             >Sao chép</a-button
           >
           <a-button
@@ -254,10 +257,18 @@ export default {
       ECM.MoveFile(payload)
         .then((res) => {
           console.log(res);
+          if (res?.code === "0") {
+            this.$message.success(res?.message || "Di chuyển file thành công");
+          } else {
+            this.$message.warning(res?.message);
+          }
           this.loadingMove = false;
         })
         .catch((err) => {
-          console.log("err", err);
+          this.$message.error(
+            err?.data.message || "Có lỗi xảy ra, vui lòng thử lại sau"
+          );
+          this.loadingMove = false;
         });
     },
     showModal() {
