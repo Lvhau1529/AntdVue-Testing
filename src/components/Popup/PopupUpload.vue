@@ -163,6 +163,7 @@ export default {
       errorMessage: false,
       successCount: 0,
       errorCount: 0,
+      resultId: "",
     };
   },
   computed: {
@@ -206,11 +207,11 @@ export default {
       if (this.isFileUpload) {
         this.submitFileUpload();
       } else {
-        console.log("aaa");
+        this.submitErpSync();
       }
       this.$emit("ok");
     },
-    submitFileUpload() {
+    async submitFileUpload() {
       this.loading = true;
       const payload = {
         file_upload: this.fileUpload[0],
@@ -218,7 +219,7 @@ export default {
         overwrite: 0,
       };
       // this.submitErpProcess(payload);
-      ECM.UploadFile(payload)
+      await ECM.UploadFile(payload)
         .then((res) => {
           if (res?.details[0].code === "0") {
             this.$message.success(
@@ -245,8 +246,24 @@ export default {
       ECM.ErpProcess(payload)
         .then((res) => {
           this.isFileUpload = false;
+          this.resultId = res[0];
           this.errorCount = res[1]["So luong hoa don khong trung khop"];
           this.successCount = res[1]["So luong hoa don trung khop"];
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.$message.error(
+            err?.data.message || "Có lỗi xảy ra, vui lòng thử lại sau"
+          );
+        });
+    },
+    submitErpSync() {
+      this.loading = true;
+      const payload = { result_id: this.resultId };
+      ECM.ErpProcess(payload)
+        .then((res) => {
+          console.log(res);
           this.loading = false;
         })
         .catch((err) => {

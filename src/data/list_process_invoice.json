@@ -1,128 +1,132 @@
 {
-  "details": [
-    {
-      "ecm_path": "/mobifone/files/BD_00000156_28092022.xml",
-      "file_id": 112214,
-      "invoice_file_name": "BD_00000156_28092022.xml",
-      "ky_hieu_hoa_don": "C22TAA",
-      "mau_so_hoa_don": "1",
-      "mst_nguoi_ban": "0106845617",
-      "ngay_lap_hoa_don": "2022-09-28",
-      "so_hoa_don": "00000156",
-      "ten_nguoi_ban": "CÔNG TY CỔ PHẦN CÔNG NGHỆ VÀ TRUYỀN THÔNG XTEL",
-      "tong_tien_khong_thue": "18469999",
-      "tong_tien_thue": "1847000",
-      "user_upload": "mobifone"
-    },
-    {
-      "ecm_path": "/mobifone/files/BD_82_29092022.xml",
-      "file_id": 112215,
-      "invoice_file_name": "BD_82_29092022.xml",
-      "ky_hieu_hoa_don": "C22TTN",
-      "mau_so_hoa_don": "1",
-      "mst_nguoi_ban": "0313111935",
-      "ngay_lap_hoa_don": "2022-09-29",
-      "so_hoa_don": "82",
-      "ten_nguoi_ban": "CÔNG TY TNHH THƯƠNG MẠI DỊCH VỤ & VIỄN THÔNG THÀNH NHÂN",
-      "tong_tien_khong_thue": "499513967",
-      "tong_tien_thue": "49951397",
-      "user_upload": "mobifone"
-    },
-    {
-      "ecm_path": "/mobifone/files/BD_khong_cks.xml",
-      "file_id": 112213,
-      "invoice_file_name": "BD_khong_cks.xml",
-      "ky_hieu_hoa_don": "C22TAD",
-      "mau_so_hoa_don": "1",
-      "mst_nguoi_ban": "0108997679",
-      "ngay_lap_hoa_don": "2022-08-18",
-      "so_hoa_don": "00000009",
-      "ten_nguoi_ban": "CÔNG TY CỔ PHẦN CÔNG NGHỆ CAO VÀ TRUYỀN THÔNG SỐ ADFILEX",
-      "tong_tien_khong_thue": "4220681892.000000",
-      "tong_tien_thue": "422068189.000000",
-      "user_upload": "mobifone"
-    },
-    {
-      "ecm_path": "/mobifone/files/BIGDATA-00000064-31012023.xml",
-      "file_id": 112212,
-      "invoice_file_name": "BIGDATA-00000064-31012023.xml",
-      "ky_hieu_hoa_don": "C23TTS",
-      "mau_so_hoa_don": "1",
-      "mst_nguoi_ban": "0106957913",
-      "ngay_lap_hoa_don": "2023-01-31",
-      "so_hoa_don": "00000064",
-      "ten_nguoi_ban": "CÔNG TY CỔ PHẦN TRUSTING SOCIAL",
-      "tong_tien_khong_thue": "987017500",
-      "tong_tien_thue": "98701750",
-      "user_upload": "mobifone"
-    },
-    {
-      "ecm_path": "/mobifone/files/BIGDATA-00000065-31012023.xml",
-      "file_id": 112216,
-      "invoice_file_name": "BIGDATA-00000065-31012023.xml",
-      "ky_hieu_hoa_don": "C23TTS",
-      "mau_so_hoa_don": "1",
-      "mst_nguoi_ban": "0106957913",
-      "ngay_lap_hoa_don": "2023-01-31",
-      "so_hoa_don": "00000065",
-      "ten_nguoi_ban": "CÔNG TY CỔ PHẦN TRUSTING SOCIAL",
-      "tong_tien_khong_thue": "12082500",
-      "tong_tien_thue": "1208250",
-      "user_upload": "mobifone"
-    },
-    {
-      "ecm_path": "/mobifone/files/BIGDATA-00000066-31012023.xml",
-      "file_id": 112217,
-      "invoice_file_name": "BIGDATA-00000066-31012023.xml",
-      "ky_hieu_hoa_don": "C23TTS",
-      "mau_so_hoa_don": "1",
-      "mst_nguoi_ban": "0106957913",
-      "ngay_lap_hoa_don": "2023-01-31",
-      "so_hoa_don": "00000066",
-      "ten_nguoi_ban": "CÔNG TY CỔ PHẦN TRUSTING SOCIAL",
-      "tong_tien_khong_thue": "110605000",
-      "tong_tien_thue": "11060500",
-      "user_upload": "mobifone"
-    },
-    {
-      "ecm_path": "/mobifone/files/BIGDATA-00000067-31012023.xml",
-      "file_id": 112218,
-      "invoice_file_name": "BIGDATA-00000067-31012023.xml",
-      "ky_hieu_hoa_don": "C23TTS",
-      "mau_so_hoa_don": "1",
-      "mst_nguoi_ban": "0106957913",
-      "ngay_lap_hoa_don": "2023-01-31",
-      "so_hoa_don": "00000067",
-      "ten_nguoi_ban": "CÔNG TY CỔ PHẦN TRUSTING SOCIAL",
-      "tong_tien_khong_thue": "18932500",
-      "tong_tien_thue": "1893250",
-      "user_upload": "mobifone"
-    },
-    {
-      "ecm_path": "/mobifone/files/BIGDATA-00000068-31012023.xml",
-      "file_id": 112219,
-      "invoice_file_name": "BIGDATA-00000068-31012023.xml",
-      "ky_hieu_hoa_don": "C23TTS",
-      "mau_so_hoa_don": "1",
-      "mst_nguoi_ban": "0106957913",
-      "ngay_lap_hoa_don": "2023-01-31",
-      "so_hoa_don": "00000068",
-      "ten_nguoi_ban": "CÔNG TY CỔ PHẦN TRUSTING SOCIAL",
-      "tong_tien_khong_thue": "2307500",
-      "tong_tien_thue": "230750",
-      "user_upload": "mobifone"
-    }
-  ],
-  "fail_data": [
-    [
-      103184,
-      "/mobifone/files/1C22TAD091238129038.xml"
+    "details": [
+        {
+            "ecm_path": "/mobifone/files/0202161183-C22TYY5490.xml",
+            "file_id": 113878,
+            "invoice_file_name": "0202161183-C22TYY5490.xml",
+            "ky_hieu_hoa_don": "C22TYY",
+            "mau_so_hoa_don": "1",
+            "mst_nguoi_ban": "0202161183",
+            "ngay_chung_tu": "31/12/2022",
+            "ngay_lap_hoa_don": "2022-12-19",
+            "so_hoa_don": "5490",
+            "ten_nguoi_ban": "Công ty TNHH Đầu tư và phát triển thương mại Minh Thùy",
+            "tham_chieu": "420020479",
+            "tong_tien_khong_thue": "1000000",
+            "tong_tien_thue": "80000",
+            "user_upload": "mobifone"
+        },
+        {
+            "ecm_path": "/mobifone/files/1 (5th copy).xml",
+            "file_id": 113558,
+            "invoice_file_name": "1 (5th copy).xml",
+            "ky_hieu_hoa_don": "C23TTS",
+            "mau_so_hoa_don": "1",
+            "mst_nguoi_ban": "0106957913",
+            "ngay_lap_hoa_don": "2023-01-31",
+            "so_hoa_don": "00000068",
+            "ten_nguoi_ban": "CÔNG TY CỔ PHẦN TRUSTING SOCIAL",
+            "tong_tien_khong_thue": "2307500",
+            "tong_tien_thue": "230750",
+            "user_upload": "mobifone"
+        },
+        {
+            "ecm_path": "/mobifone/files/1 (6th copy).xml",
+            "file_id": 113557,
+            "invoice_file_name": "1 (6th copy).xml",
+            "ky_hieu_hoa_don": "C23TTS",
+            "mau_so_hoa_don": "1",
+            "mst_nguoi_ban": "0106957913",
+            "ngay_lap_hoa_don": "2023-01-31",
+            "so_hoa_don": "00000068",
+            "ten_nguoi_ban": "CÔNG TY CỔ PHẦN TRUSTING SOCIAL",
+            "tong_tien_khong_thue": "2307500",
+            "tong_tien_thue": "230750",
+            "user_upload": "mobifone"
+        },
+        {
+            "ecm_path": "/mobifone/files/1 (7th copy).xml",
+            "file_id": 113560,
+            "invoice_file_name": "1 (7th copy).xml",
+            "ky_hieu_hoa_don": "C23TTS",
+            "mau_so_hoa_don": "1",
+            "mst_nguoi_ban": "0106957913",
+            "ngay_lap_hoa_don": "2023-01-31",
+            "so_hoa_don": "00000068",
+            "ten_nguoi_ban": "CÔNG TY CỔ PHẦN TRUSTING SOCIAL",
+            "tong_tien_khong_thue": "2307500",
+            "tong_tien_thue": "230750",
+            "user_upload": "mobifone"
+        },
+        {
+            "ecm_path": "/mobifone/files/1C22TSM_00000098.xml",
+            "file_id": 113832,
+            "invoice_file_name": "1C22TSM_00000098.xml",
+            "ky_hieu_hoa_don": "C22TSM",
+            "mau_so_hoa_don": "1",
+            "mst_nguoi_ban": "0102909820",
+            "ngay_lap_hoa_don": "2022-12-09",
+            "so_hoa_don": "00000098",
+            "ten_nguoi_ban": "CÔNG TY CỔ PHẦN SMATEC",
+            "tong_tien_khong_thue": "1940000000.000000",
+            "tong_tien_thue": "194000000.000000",
+            "user_upload": "mobifone"
+        },
+        {
+            "ecm_path": "/mobifone/files/2.xml",
+            "file_id": 113565,
+            "invoice_file_name": "2.xml",
+            "ky_hieu_hoa_don": "C23TTS",
+            "mau_so_hoa_don": "1",
+            "mst_nguoi_ban": "0106957913",
+            "ngay_lap_hoa_don": "2023-01-31",
+            "so_hoa_don": "00000068",
+            "ten_nguoi_ban": "CÔNG TY CỔ PHẦN TRUSTING SOCIAL",
+            "tong_tien_khong_thue": "2307500",
+            "tong_tien_thue": "230750",
+            "user_upload": "mobifone"
+        },
+        {
+            "ecm_path": "/mobifone/files/BD_00000156_28092022.xml",
+            "file_id": 112214,
+            "invoice_file_name": "BD_00000156_28092022.xml",
+            "ky_hieu_hoa_don": "C22TAA",
+            "mau_so_hoa_don": "1",
+            "mst_nguoi_ban": "0106845617",
+            "ngay_lap_hoa_don": "2022-09-28",
+            "so_hoa_don": "00000156",
+            "ten_nguoi_ban": "CÔNG TY CỔ PHẦN CÔNG NGHỆ VÀ TRUYỀN THÔNG XTEL",
+            "tong_tien_khong_thue": "18469999",
+            "tong_tien_thue": "1847000",
+            "user_upload": "mobifone"
+        },
+        {
+            "ecm_path": "/mobifone/files/BD_82_29092022.xml",
+            "file_id": 112215,
+            "invoice_file_name": "BD_82_29092022.xml",
+            "ky_hieu_hoa_don": "C22TTN",
+            "mau_so_hoa_don": "1",
+            "mst_nguoi_ban": "0313111935",
+            "ngay_lap_hoa_don": "2022-09-29",
+            "so_hoa_don": "82",
+            "ten_nguoi_ban": "CÔNG TY TNHH THƯƠNG MẠI DỊCH VỤ & VIỄN THÔNG THÀNH NHÂN",
+            "tong_tien_khong_thue": "499513967",
+            "tong_tien_thue": "49951397",
+            "user_upload": "mobifone"
+        }
     ],
-    [
-      6201,
-      "/mobifone/files/1C22TAD_00000009_1676217770 - Copy (2).xml"
-    ]
-  ],
-  "num_invoices": 8,
-  "num_total_files": 12
+    "fail_data": [
+        {
+            "file_id": 103184,
+            "file_name": "1C22TAD091238129038.xml",
+            "upload_user": "mobifone"
+        },
+        {
+            "file_id": 6201,
+            "file_name": "1C22TAD_00000009_1676217770 - Copy (2).xml",
+            "upload_user": "mobifone"
+        }
+    ],
+    "num_invoices": 8,
+    "num_total_files": 22
 }

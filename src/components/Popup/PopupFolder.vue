@@ -248,13 +248,13 @@ export default {
       };
     },
     handleCopyFile() {},
-    handleMoveFile() {
+    async handleMoveFile() {
       this.loadingMove = true;
       const payload = {
-        ecm_source_path: this.getSelectedRowKeys[0].ecm_path,
+        ecm_source_path: this.getSelectedRowKeys[0].invoice_file_name,
         ecm_destination_path: this.selectFolder,
       };
-      ECM.MoveFile(payload)
+      await ECM.MoveFile(payload)
         .then((res) => {
           console.log(res);
           if (res?.code === "0") {
