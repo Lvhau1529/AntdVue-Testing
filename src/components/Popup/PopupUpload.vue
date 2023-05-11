@@ -221,13 +221,12 @@ export default {
             this.$message.success(
               res?.details[0].message || "Upload file thành công"
             );
-            // After upload file call api show notification
-            this.checkErpProcess(payload);
-            this.handleClearUpload();
           } else {
             this.$message.warning(res?.details[0].message);
-            this.loading = false;
           }
+          // After upload file call api show notification
+          this.submitErpProcess(payload);
+          this.handleClearUpload();
         })
         .catch((err) => {
           this.loading = false;
