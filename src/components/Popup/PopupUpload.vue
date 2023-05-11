@@ -208,7 +208,6 @@ export default {
         this.submitFileUpload();
       } else {
         this.submitErpSync();
-        this.handleClearUpload();
       }
       this.$emit("Cancel");
     },
@@ -264,6 +263,7 @@ export default {
         .then((res) => {
           this.loading = false;
           this.$message.success(res[0]?.message);
+          this.handleClearUpload();
         })
         .catch((err) => {
           this.loading = false;
