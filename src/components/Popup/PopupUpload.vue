@@ -208,8 +208,9 @@ export default {
         this.submitFileUpload();
       } else {
         this.submitErpSync();
+        this.handleClearUpload();
       }
-      this.$emit("ok");
+      this.$emit("Cancel");
     },
     async submitFileUpload() {
       this.loading = true;
@@ -230,14 +231,12 @@ export default {
           }
           // After upload file call api show notification
           this.submitErpProcess(payload);
-          this.handleClearUpload();
         })
         .catch((err) => {
           this.loading = false;
           this.$message.error(
             err?.data.message || "Có lỗi xảy ra, vui lòng thử lại sau"
           );
-          this.handleClearUpload();
         });
     },
     submitErpProcess(payload) {
@@ -261,10 +260,10 @@ export default {
     submitErpSync() {
       this.loading = true;
       const payload = { result_id: this.resultId };
-      ECM.ErpProcess(payload)
+      ECM.ErpSync(payload)
         .then((res) => {
-          console.log(res);
           this.loading = false;
+          this.$message.success(res[0]?.message);
         })
         .catch((err) => {
           this.loading = false;
