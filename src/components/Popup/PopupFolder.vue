@@ -77,14 +77,16 @@
       <template slot="footer">
         <div class="modal__footer">
           <a-button
+            type="primary"
             @click="handleCopyFile"
+            :disabled="loadingMove"
             :loading="loadingCopy"
-            :disabled="true"
             >Sao chép</a-button
           >
           <a-button
             type="primary"
             @click="handleMoveFile"
+            :disabled="loadingCopy"
             :loading="loadingMove"
             >Chuyển</a-button
           >
@@ -130,6 +132,7 @@ export default {
           dataIndex: "title",
           width: "250px",
           scopedSlots: { customRender: "nameFolder" },
+          sorter: (a, b) => a.title.localeCompare(b.title),
         },
         {
           title: "Kích cỡ",
@@ -150,7 +153,6 @@ export default {
     },
   },
   created() {
-    // const listFolder = this.handleListFolder(list_folder.result);
     const listFolder = this.handleListFolder(this.rawList.result);
     this.data = [this.transformData(listFolder[0].child)];
     this.showData = this.data;
@@ -247,7 +249,27 @@ export default {
         },
       };
     },
-    handleCopyFile() {},
+    handleCopyFile() {
+      this.loadingCopy = true;
+      const payload = {
+        ecm_source_path: this.getSelectedRowKeys[0].invoice_file_name,
+        ecm_destination_path: this.selectFolder,
+      };
+      ECM.CopyFile(payload)
+        .then((res) => {
+          if (res?.code === "0") {
+            this.$message.success(res?.message || "Copy file thành công");
+          } else {
+            this.$message.warning(res?.message);
+          }
+        })
+        .catch((err) => {
+          this.$message.error(
+            err?.data.message || "Có lỗi xảy ra, vui lòng thử lại sau"
+          );
+          this.loadingCopy = false;
+        });
+    },
     async handleMoveFile() {
       this.loadingMove = true;
       const payload = {

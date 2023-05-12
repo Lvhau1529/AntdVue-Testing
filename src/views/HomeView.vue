@@ -214,6 +214,7 @@ export default {
       setTreeData: "global/setTreeData",
     }),
     async init() {
+      // this.rawList = list_folder;
       // const listFolder = this.handleListFolder(list_folder.result);
       // this.setTreeData([this.transformData(listFolder[0].children)]);
       // this.treeData = [this.transformData(listFolder[0].children)];

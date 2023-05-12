@@ -22,6 +22,9 @@ class ECM {
   MoveFile(payload) {
     return http.post("file/move", payload);
   }
+  CopyFile(payload) {
+    return http.post("file/copy", payload);
+  }
   ErpSync(payload) {
     return http.post("erp/erp_syn_process", payload);
   }
