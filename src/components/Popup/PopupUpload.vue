@@ -11,7 +11,7 @@
     >
       <template slot="title">
         <div class="modal__header">
-          <p v-if="!isFileUpload">
+          <p v-if="isFileUpload">
             Bạn vui lòng chọn file bảng kê ERP để đồng bộ dữ liệu
           </p>
           <p v-else>Thông báo</p>

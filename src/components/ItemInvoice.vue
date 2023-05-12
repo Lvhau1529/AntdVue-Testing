@@ -35,9 +35,16 @@ export default {
         }
       },
     },
+    "$store.state.global.folderSelected": {
+      handler() {
+        this.checkVaildInvoice(this.fileId);
+      },
+    },
   },
-  mounted() {
-    this.checkVaildInvoice(this.fileId);
+  created() {
+    if (this.$store.state.global.folderSelected) {
+      this.checkVaildInvoice(this.fileId);
+    }
   },
   computed: {
     ...mapGetters("table", ["getSelectedRowKeys"]),
