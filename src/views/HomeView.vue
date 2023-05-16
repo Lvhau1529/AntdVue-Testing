@@ -115,6 +115,7 @@
       v-if="!hidePopupFolder"
       ref="PopupFolder"
       :rawList="rawList"
+      @moveSuccess="handleMoveSuccess"
       @Cancel="hidePopupFolder = true"
     />
     <PopupUpload
@@ -349,6 +350,10 @@ export default {
     },
     handleCheckValidSuccess() {
       this.loading = false;
+    },
+    handleMoveSuccess() {
+      this.$refs.TableField.getDataTable();
+      this.setSelectedRowKeys([]);
     },
   },
 };

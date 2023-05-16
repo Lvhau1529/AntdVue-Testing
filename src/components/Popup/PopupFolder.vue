@@ -281,6 +281,7 @@ export default {
           console.log(res);
           if (res?.code === "0") {
             this.$message.success(res?.message || "Di chuyển file thành công");
+            this.$emit("moveSuccess");
           } else {
             this.$message.warning(res?.message);
           }
@@ -323,6 +324,7 @@ export default {
     &--note {
       font-style: italic;
     }
+
     &--header {
       display: flex;
       justify-content: space-between;
@@ -339,22 +341,27 @@ export default {
     }
   }
 }
+
 .folders {
   margin-top: 15px;
+
   .folder-item {
     text-align: center;
     margin-bottom: 15px;
     cursor: pointer;
+
     &:hover {
       background-color: #e6f4ff;
     }
   }
 }
+
 .item-title {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 ::v-deep .ant-table-thead > tr > th,
 ::v-deep .ant-table-tbody > tr > td {
   padding: 10px;
